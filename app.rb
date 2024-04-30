@@ -74,6 +74,19 @@ class TicTacToe
 
   end
 
+  def next_player
+    # move the top player (the one whose turn it currently is) last
+    @players.push @players.unshift
+  end
+
+  def is_correct_dim game_square
+    square_array = game_square.square
+    square_array.reduce true do |is_correct_rows, pixel_row|
+      break false unless square_array.length == self.sq_rows
+      is_correct_rows && pixel_row.length == self.sq_cols
+    end
+  end
+
   def self.game_error error_prefix, error_message
     error_prefix + ": " + error_message
   return
@@ -149,46 +162,37 @@ class TicTacToe
         self.board_size.times do |col|
           col_id = 'a'..'z'[col]
           coord = col_id + row_id.to_s
-          row_array.push GameSquare.new coord, self.board_size, self.sq_rows, self.sq_cols
-
+          new_game_square = GameSquare.new coord, self.board_size, self.sq_rows, self.sq_cols
+          raise SquareSizeError unless is_correct_dim new_game_square
+          row_array.push new_game_square
           self.game_matrix.push row_array
         end
       end
     rescue GameMatrixError
       msg_bad_player_error = "game matrix already has pieces in it!"
-      puts TicTacToe.game_error err_prefix, msg_bad_player_error
+      puts self.class..game_error err_prefix, msg_bad_player_error
+    rescue SquareSizeError
+      msg_square_size_error <<-STRING
+        drawn square must be an array containing #{self.sq_rows} arrays,
+        each containing #{self.sq_cols} string entries
+      STRING
+      puts self.class.game_error err_prefix, msg_square_size_error
     end
   end
 
-
-
   def draw_squares
-    err_prefix = "TicTacToe.draw_squares ERROR"
-    begin
-      # every square_length rows, there's a border
-      # replace in each row, or array, the number of
-      # digits in the square row, starting with
-      # nth piece + (nth_piece - 1) * (width_row + nth_piece)
-
-      self.game_matrix.each_with_index do |row, i|
-        starting_row = 1 + i * (1 + self.sq_rows)
-        ending_row = starting_row + self.sq_rows
-
-        row.each_with_index do |piece, j|
-          starting_col = 1 + j * (1 + self.sq_cols)
-          ending_col = starting_col + self.sq_cols
-
-          piece.square.each_with_index do |piece_row, k|
-            piece_row_id = starting_row + k
-            self.game_board[piece_row_id][starting_col, self.sq_rows] = piece_row
-          end
-
+    self.game_matrix.each_with_index do |row, i|
+      starting_row = 1 + i * (1 + self.sq_rows)
+      ending_row = starting_row + self.sq_rows
+      row.each_with_index do |piece, j|
+        starting_col = 1 + j * (1 + self.sq_cols)
+        ending_col = starting_col + self.sq_cols
+        piece.square.each_with_index do |piece_row, k|
+          piece_row_id = starting_row + k
+          self.game_board[piece_row_id][starting_col, self.sq_rows] = piece_row
         end
-
       end
-
     end
-
   end
 
   def check_winner
@@ -308,32 +312,29 @@ class GameSquare < TicTacToe
     }
   }
 
-  attr_reader :coordinates, :player, :square, :sq_rows, :sq_cols
+  attr_reader :coordinates, :player, :square
 
-  def initialize coordinates, sq_rows, sq_cols, player = nil, win = false
+  def initialize coordinates, player = nil
     err_prefix = "GameSquare.initialize ERROR"
     begin
       player_id = player.to_sym
       @square = SQUARES[player_id]
       @coordinates = coordinates
       @player = player
-      @sq_rows = sq_rows
-      @sq_cols = sq_cols
 
       raise BadPlayerError unless SQUARES.key? player_id
-      raise BadSquareError unless self.is_good_square
+      raise BadPixelError unless is_correct_pixel
 
       self.square
     rescue BadPlayerError
       msg_bad_player_error = "choices are 'x', 'o' or 'nil' (for the game board)"
       puts TicTacToe.game_error err_prefix, msg_bad_player_error
-    rescue BadSquareError
-      msg_bad_square_error <<-STRING
-        drawn square must be an array containing #{sq_rows} arrays,
-        each containing #{sq_cols} string entries
-        which are one character long."
+    rescue BadPixelError
+      msg_bad_pixel_error <<-STRING
+        each entry in the square array represents one pixel, and must be
+        exactly one character long
       STRING
-      puts TicTacToe.game_error err_prefix, msg_bad_square_error
+      puts TicTacToe.game_error err_prefix, msg_bad_pixel_error
     end
   end
 
@@ -346,16 +347,6 @@ class GameSquare < TicTacToe
     end
   end
 
-  def is_correct_dim sq_rows, sq_cols
-    self.square.reduce true do |is_correct_rows, pixel_row|
-      break false unless self.square.length == self.sq_rows
-      is_correct_rows && pixel_row.length == self.sq_cols
-    end
-  end
-
-  def is_good_square
-    self.is_correct_pixel && self.is_correct_dim
-  end
 
   def assign_player player
     err_prefix = "GameSquare.assign_square ERROR"
