@@ -64,7 +64,55 @@ class TicTacToe
 
   include GetUserInput
 
-  attr_reader :board_size, :game_matrix, :game_board, :players, :score, :sq_rows, :sq_cols
+  attr_reader :board_size, :game_matrix, :game_board, :players, :stats, :sq_rows, :sq_cols
+
+
+  def draw_title
+
+  end
+
+  def draw_hud
+
+  end
+
+  def draw_board
+
+  end
+
+  def get_player_input
+
+  end
+
+  def assign_piece coordinates
+
+  end
+
+  def play_turn
+    draw_title
+    draw_hud
+    draw_board
+
+    player_input = get_player_input
+    assign_piece player_input
+
+    check_winner
+  end
+
+  def play_again
+
+  end
+
+  def play_game
+    is_quit = nil
+    until is_quit do
+      is_winner = false
+      until is_winner do
+        is_winner = play_turn
+      end
+      assign_winner is_winner
+      is_quit = play_again
+    end
+  end
 
   def assign_winner win_array
     win_pieces = win_array[0]
@@ -114,7 +162,11 @@ class TicTacToe
       raise GameSizeError unless is_size_int && is_size_in_range
 
       @board_size = board_size.to_i
-      @score = {x: 0, o: 0}
+      @stats = {
+        score: {x: 0, o: 0}
+        turn: {x: 0, o: 0}
+        round: 0
+        }
       @sq_rows = SQUARE_SIZE[0]
       @sq_cols = SQUARE_SIZE[1]
     rescue GameSizeError
