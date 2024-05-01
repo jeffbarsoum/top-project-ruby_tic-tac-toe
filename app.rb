@@ -56,15 +56,10 @@ end
 ###############################################################################
 class TicTacToe
   SQUARE_CHOICES = [:x, :o, :nil]
-  SQUARE_SIZE = [3, 5]
-  DEFAULT_BOARD_SIZE = 3
-  MAX_BOARD_SIZE = 7
-
-  @@border = { top: "_", side: "|", bottom: "-", corner: "+"}
 
   include GetUserInput
 
-  attr_reader :board_size, :game_matrix, :game_board, :players, :stats, :sq_rows, :sq_cols
+  attr_reader :game_board, :players, :stats, :sq_rows, :sq_cols
 
 
   def draw_title
@@ -114,25 +109,9 @@ class TicTacToe
     end
   end
 
-  def assign_winner win_array
-    win_pieces = win_array[0]
-    win_type = win_array[1]
-
-    win_pieces.each |piece| do { piece.assign_win win_type }
-
-  end
-
   def next_player
     # move the top player (the one whose turn it currently is) last
     @players.push @players.unshift
-  end
-
-  def is_correct_dim game_square
-    square_array = game_square.square
-    square_array.reduce true do |is_correct_rows, pixel_row|
-      break false unless square_array.length == self.sq_rows
-      is_correct_rows && pixel_row.length == self.sq_cols
-    end
   end
 
   def self.game_error error_prefix, error_message
@@ -140,12 +119,55 @@ class TicTacToe
   return
 
   def initialize
-    @players = []
-    until Player.get_free_players.empty? do
-      name = GetUserInput.return_user_input message, false
-      self.players.push Player.new name
-    end
     err_prefix = "TicTacToe.initialize ERROR"
+    begin
+      @players = []
+      until Player.get_free_players.empty? do
+        name = GetUserInput.return_user_input message, false
+        self.players.push Player.new name
+      end
+
+      @game_board = GameBoard.new
+      @stats = {
+        score: {x: 0, o: 0}
+        turn: {x: 0, o: 0}
+        round: 0
+        }
+    end
+
+  end
+
+  def change_turn
+
+  end
+
+
+  def check_winner
+    is_column_win = self.game_board.check_column
+    return is_column_win if is_column_win
+
+    is_row_win = self.game_board.check_row
+    return is_row_win if is_row_win
+
+    is_diagonal_win = self.game_board.check_diagonal
+    return is_diagonal_win if is_diagonal_win
+
+    false
+  end
+
+
+end
+
+class GameBoard < TicTacToe
+  SQUARE_SIZE = [3, 5]
+  DEFAULT_BOARD_SIZE = 3
+  MAX_BOARD_SIZE = 7
+  @@border = { top: "_", side: "|", bottom: "-", corner: "+"}
+
+  attr_reader :board_size, :game_matrix, :game_board, :sq_rows, :sq_cols
+
+  def initialize board_size = DEFAULT_BOARD_SIZE, sq_rows = SQUARE_SIZE[0], sq_cols = SQUARE_SIZE[1]
+    err_prefix = "GameBoard.initialize ERROR"
     begin
       msg_ask_game_size <<-STRING
         How big do you want the Tic Tac Toe Board to be?
@@ -161,14 +183,13 @@ class TicTacToe
 
       raise GameSizeError unless is_size_int && is_size_in_range
 
-      @board_size = board_size.to_i
-      @stats = {
-        score: {x: 0, o: 0}
-        turn: {x: 0, o: 0}
-        round: 0
-        }
-      @sq_rows = SQUARE_SIZE[0]
-      @sq_cols = SQUARE_SIZE[1]
+      @board_size = board_size
+      @sq_rows = sq_rows
+      @sq_cols = sq_cols
+
+      populate_matrix
+      populate_board
+      populate_squares
     rescue GameSizeError
       err_message <<-STRING
         game size must be an integer between  #{DEFAULT_BOARD_SIZE} arrays with
@@ -176,12 +197,36 @@ class TicTacToe
       STRING
       puts self.class.game_error err_prefix, err_message
     end
-
   end
 
-  def change_turn
-
+  def populate_matrix
+    err_prefix = "TicTacToe.populate_matrix ERROR"
+    begin
+      raise GameMatrixError unless self.game_matrix.empty?
+      self.board_size.times do |row|
+        row_id = row + 1
+        row_array = []
+        self.board_size.times do |col|
+          col_id = 'a'..'z'[col]
+          coord = col_id + row_id.to_s
+          new_game_square = GameSquare.new coord, self.board_size, self.sq_rows, self.sq_cols
+          raise SquareSizeError unless is_correct_dim new_game_square
+          row_array.push new_game_square
+          self.game_matrix.push row_array
+        end
+      end
+    rescue GameMatrixError
+      msg_bad_player_error = "game matrix already has pieces in it!"
+      puts self.class.game_error err_prefix, msg_bad_player_error
+    rescue SquareSizeError
+      msg_square_size_error <<-STRING
+        drawn square must be an array containing #{self.sq_rows} arrays,
+        each containing #{self.sq_cols} string entries
+      STRING
+      puts self.class.game_error err_prefix, msg_square_size_error
+    end
   end
+
 
   def populate_board
     (self.board_size * self.sq_rows).times do |row|
@@ -204,35 +249,7 @@ class TicTacToe
     end
   end
 
-  def populate_matrix
-    err_prefix = "TicTacToe.populate_matrix ERROR"
-    begin
-      raise GameMatrixError unless self.game_matrix.empty?
-      self.board_size.times do |row|
-        row_id = row + 1
-        row_array = []
-        self.board_size.times do |col|
-          col_id = 'a'..'z'[col]
-          coord = col_id + row_id.to_s
-          new_game_square = GameSquare.new coord, self.board_size, self.sq_rows, self.sq_cols
-          raise SquareSizeError unless is_correct_dim new_game_square
-          row_array.push new_game_square
-          self.game_matrix.push row_array
-        end
-      end
-    rescue GameMatrixError
-      msg_bad_player_error = "game matrix already has pieces in it!"
-      puts self.class..game_error err_prefix, msg_bad_player_error
-    rescue SquareSizeError
-      msg_square_size_error <<-STRING
-        drawn square must be an array containing #{self.sq_rows} arrays,
-        each containing #{self.sq_cols} string entries
-      STRING
-      puts self.class.game_error err_prefix, msg_square_size_error
-    end
-  end
-
-  def draw_squares
+  def populate_squares
     self.game_matrix.each_with_index do |row, i|
       starting_row = 1 + i * (1 + self.sq_rows)
       ending_row = starting_row + self.sq_rows
@@ -247,17 +264,12 @@ class TicTacToe
     end
   end
 
-  def check_winner
-    is_column_win = check_column
-    return is_column_win if is_column_win
-
-    is_row_win = check_row
-    return is_row_win if is_row_win
-
-    is_diagonal_win = check_diagonal
-    return is_diagonal_win if is_diagonal_win
-
-    false
+  def is_correct_dim game_square
+    square_array = game_square.square
+    square_array.reduce true do |is_correct_rows, pixel_row|
+      break false unless square_array.length == self.sq_rows
+      is_correct_rows && pixel_row.length == self.sq_cols
+    end
   end
 
   def check_row
@@ -298,6 +310,15 @@ class TicTacToe
 
     return false
   end
+
+  def assign_winner win_array
+    win_pieces = win_array[0]
+    win_type = win_array[1]
+
+    win_pieces.each |piece| do { piece.assign_win win_type }
+
+  end
+
 end
 
 class GameSquare < TicTacToe
