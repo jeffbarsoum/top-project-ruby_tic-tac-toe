@@ -1,69 +1,7 @@
 require_relative "tic_tac_toe"
+require_relative "../module/game_data"
 
 class GameSquare < TicTacToe
-
-  SQUARES = {
-    nil: [
-      ['', '', '', '', ''],
-      ['', self.coordinates[0], '', self.coordinates[1], ''],
-      ['', '', '', '', '']
-    ]
-    x: {
-      place: [
-        ['x', '', '', '', 'x'],
-        ['', '', 'x', '', ''],
-        ['x', '', '', '', 'x']
-      ],
-      win_horizontal: [
-        ['x', '', '', '', 'x'],
-        ['-', '-', '-', '-', '-'],
-        ['x', '', '', '', 'x']
-      ],
-      win_vertical: [
-        ['x', '', '|', '', 'x'],
-        ['', '', '|', '', ''],
-        ['x', '', '|', '', 'x']
-      ],
-      win_left_diagonal: [
-        ['\\', '', '', '', 'x'],
-        ['', '', '\\', '', ''],
-        ['x', '', '', '', '\\']
-      ],
-      win_right_diagonal: [
-        ['x', '', '', '', '/'],
-        ['', '', '/', '', ''],
-        ['/', '', '', '', 'x']
-      ]
-    }
-    o:  {
-      place: [
-        ['', 'x', 'x', 'x', ''],
-        ['x', '', '', '', 'x'],
-        ['', 'x', 'x', 'x', '']
-      ],
-      horizontal: [
-        ['', 'x', 'x', 'x', ''],
-        ['-', '-', '-', '-', '-'],
-        ['', 'x', 'x', 'x', '']
-      ],
-      vertical: [
-        ['', 'x', '|', 'x', ''],
-        ['x', '', '|', '', 'x'],
-        ['', 'x', '|', 'x', '']
-      ],
-      left_diagonal: [
-        ['\\', 'x', 'x', 'x', ''],
-        ['x', '', '\\', '', 'x'],
-        ['', 'x', 'x', 'x', '\\']
-      ],
-      right_diagonal: [
-        ['', 'x', 'x', 'x', '/'],
-        ['x', '', '/', '', 'x'],
-        ['/', 'x', 'x', 'x', '']
-      ]
-    }
-  }
-
   attr_reader :coordinates, :player, :square
 
   def initialize coordinates, player = nil
