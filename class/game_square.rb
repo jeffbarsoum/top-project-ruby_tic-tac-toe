@@ -1,8 +1,8 @@
-require_relative "game_board"
+require_relative "game_matrix"
 require_relative "../module/game_data"
 require_relative "../module/game_error"
 
-class GameSquare < GameBoard
+class GameSquare < GameMatrix
   include GameData
   include GameError
 

@@ -1,4 +1,5 @@
 require_relative "tic_tac_toe"
+require_relative "game_matrix"
 require_relative "../module/game_error"
 
 class GameBoard < TicTacToe
@@ -34,7 +35,8 @@ class GameBoard < TicTacToe
       @sq_rows = sq_rows
       @sq_cols = sq_cols
 
-      populate_matrix
+      @game_matrix = GameMatrix.new self.board_size, self.sq_rows, self.sq_cols
+
       populate_board
       populate_squares
     rescue GameSizeError
@@ -45,36 +47,6 @@ class GameBoard < TicTacToe
       puts GameError.game_error cls_name, func_name, err_message
     end
   end
-
-  def populate_matrix
-    cls_name = "GameBoard"
-    func_name = "populate_matrix"
-    begin
-      raise GameMatrixError unless self.game_matrix.empty?
-      self.board_size.times do |row|
-        row_id = row + 1
-        row_array = []
-        self.board_size.times do |col|
-          col_id = 'a'..'z'[col]
-          coord = col_id + row_id.to_s
-          new_game_square = GameSquare.new coord, self.board_size, self.sq_rows, self.sq_cols
-          raise SquareSizeError unless is_correct_dim new_game_square
-          row_array.push new_game_square
-          self.game_matrix.push row_array
-        end
-      end
-    rescue GameMatrixError
-      msg_bad_player_error = "game matrix already has pieces in it!"
-      puts GameError.game_error cls_name, func_name, msg_bad_player_error
-    rescue SquareSizeError
-      msg_square_size_error <<-STRING
-        drawn square must be an array containing #{self.sq_rows} arrays,
-        each containing #{self.sq_cols} string entries
-      STRING
-      puts GameError.game_error cls_name, func_name, msg_square_size_error
-    end
-  end
-
 
   def populate_board
     (self.board_size * self.sq_rows).times do |row|
@@ -98,7 +70,8 @@ class GameBoard < TicTacToe
   end
 
   def populate_squares
-    self.game_matrix.each_with_index do |row, i|
+    matrix = self.game_matrix.game_matrix
+    matrix.each_with_index do |row, i|
       starting_row = 1 + i * (1 + self.sq_rows)
       ending_row = starting_row + self.sq_rows
       row.each_with_index do |piece, j|
@@ -126,53 +99,6 @@ class GameBoard < TicTacToe
       break false unless square_array.length == self.sq_rows
       is_correct_rows && pixel_row.length == self.sq_cols
     end
-  end
-
-  def check_row
-    self.game_matrix.each_with_index do |row, i|
-      is_match =  row.uniq.count == 1
-      return [row[0], :horizontal] if is_match
-    end
-    return false
-  end
-
-  def check_column
-    self.game_matrix.each_with_index do |row, i|
-      col_array = []
-      self.game_matrix.each_with_index do |col, i|
-        col_array.push self.game_matrix[row][col]
-      end
-      is_match =  col_array.uniq.count == 1
-      return [col_array, :vertical] if is_match
-    end
-    return false
-  end
-
-  def check_diagonal
-    left_diagonal_array = []
-    right_diagonal_array = []
-    self.game_matrix.each_with_index do |row, i|
-
-      left_diagonal_array.push self.game_matrix[row][row]
-      right_diagonal_array.push self.game_matrix[row][self.game_matrix.length - 1 - row]
-
-    end
-
-    is_left_match =  left_diagonal_array.uniq.count == 1
-    return [left_diagonal_array, :left_diagonal] if is_left_match
-
-    is_right_match =  right_diagonal_array.uniq.count == 1
-    return [right_diagonal_array, :right_diagonal] if is_right_match
-
-    return false
-  end
-
-  def assign_winner win_array
-    win_pieces = win_array[0]
-    win_type = win_array[1]
-
-    win_pieces.each |piece| do { piece.assign_win win_type }
-
   end
 
 end
