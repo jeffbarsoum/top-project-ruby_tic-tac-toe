@@ -1,4 +1,5 @@
-require_relative "../module/get_user_input.rb"
+require_relative "module/get_user_input"
+require_relative "module/game_error"
 
 class TicTacToe
   SQUARE_CHOICES = [:x, :o, :nil]
@@ -6,11 +7,6 @@ class TicTacToe
   include GetUserInput
 
   attr_reader :game_board, :players, :stats, :sq_rows, :sq_cols
-
-
-  def self.game_error error_prefix, error_message
-    error_prefix + ": " + error_message
-  return
 
 
   def populate_title
@@ -68,7 +64,8 @@ class TicTacToe
   end
 
   def initialize
-    err_prefix = "TicTacToe.initialize ERROR"
+    cls_name = "TicTacToe"
+    func_name = "initialize"
     begin
       @players = []
       until Player.get_free_players.empty? do

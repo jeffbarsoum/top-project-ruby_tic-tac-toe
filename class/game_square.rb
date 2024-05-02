@@ -1,11 +1,16 @@
-require_relative "tic_tac_toe"
+require_relative "game_board"
 require_relative "../module/game_data"
+require_relative "../module/game_error"
 
-class GameSquare < TicTacToe
+class GameSquare < GameBoard
+  include GameData
+  include GameError
+
   attr_reader :coordinates, :player, :square
 
   def initialize coordinates, player = nil
-    err_prefix = "GameSquare.initialize ERROR"
+    cls_name = "GameBoard"
+    func_name = "initialize"
     begin
       player_id = player.to_sym
       @square = SQUARES[player_id]
@@ -18,13 +23,13 @@ class GameSquare < TicTacToe
       self.square
     rescue BadPlayerError
       msg_bad_player_error = "choices are 'x', 'o' or 'nil' (for the game board)"
-      puts TicTacToe.game_error err_prefix, msg_bad_player_error
+      puts GameError.game_error cls_name, func_name, msg_bad_player_error
     rescue BadPixelError
       msg_bad_pixel_error <<-STRING
         each entry in the square array represents one pixel, and must be
         exactly one character long
       STRING
-      puts TicTacToe.game_error err_prefix, msg_bad_pixel_error
+      puts GameError.game_error cls_name, func_name, msg_bad_pixel_error
     end
   end
 

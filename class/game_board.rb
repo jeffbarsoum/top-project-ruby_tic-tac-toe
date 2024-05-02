@@ -1,4 +1,5 @@
 require_relative "tic_tac_toe"
+require_relative "../module/game_error"
 
 class GameBoard < TicTacToe
   SQUARE_SIZE = [3, 5]
@@ -6,11 +7,14 @@ class GameBoard < TicTacToe
   MAX_BOARD_SIZE = 7
   @@border = { top: "_", side: "|", bottom: "-", corner: "+"}
 
+  include GameError
+
   attr_reader :board_size, :game_matrix, :game_board, :sq_rows, :sq_cols
 
 
   def initialize board_size = DEFAULT_BOARD_SIZE, sq_rows = SQUARE_SIZE[0], sq_cols = SQUARE_SIZE[1]
-    err_prefix = "GameBoard.initialize ERROR"
+    cls_name = "GameBoard"
+    func_name = "initialize"
     begin
       msg_ask_game_size <<-STRING
         How big do you want the Tic Tac Toe Board to be?
@@ -38,12 +42,13 @@ class GameBoard < TicTacToe
         game size must be an integer between  #{DEFAULT_BOARD_SIZE} arrays with
         #{MAX_BOARD_SIZE}!
       STRING
-      puts self.class.game_error err_prefix, err_message
+      puts GameError.game_error cls_name, func_name, err_message
     end
   end
 
   def populate_matrix
-    err_prefix = "TicTacToe.populate_matrix ERROR"
+    cls_name = "GameBoard"
+    func_name = "populate_matrix"
     begin
       raise GameMatrixError unless self.game_matrix.empty?
       self.board_size.times do |row|
@@ -60,13 +65,13 @@ class GameBoard < TicTacToe
       end
     rescue GameMatrixError
       msg_bad_player_error = "game matrix already has pieces in it!"
-      puts self.class.game_error err_prefix, msg_bad_player_error
+      puts GameError.game_error cls_name, func_name, msg_bad_player_error
     rescue SquareSizeError
       msg_square_size_error <<-STRING
         drawn square must be an array containing #{self.sq_rows} arrays,
         each containing #{self.sq_cols} string entries
       STRING
-      puts self.class.game_error err_prefix, msg_square_size_error
+      puts GameError.game_error cls_name, func_name, msg_square_size_error
     end
   end
 
