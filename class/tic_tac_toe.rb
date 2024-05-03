@@ -87,19 +87,4 @@ class TicTacToe
 
   end
 
-
-  def check_winner
-    is_column_win = self.game_board.check_column
-    return is_column_win if is_column_win
-
-    is_row_win = self.game_board.check_row
-    return is_row_win if is_row_win
-
-    is_diagonal_win = self.game_board.check_diagonal
-    return is_diagonal_win if is_diagonal_win
-
-    false
-  end
-
-
 end

@@ -83,7 +83,23 @@ class GameMatrix < GameBoard
     return false
   end
 
-  def assign_winner win_array
+  def check_winner
+    is_column_win = check_column
+    return is_column_win if is_column_win
+
+    is_row_win = check_row
+    return is_row_win if is_row_win
+
+    is_diagonal_win = check_diagonal
+    return is_diagonal_win if is_diagonal_win
+
+    false
+  end
+
+  def assign_winner
+    win_array = check_winner
+    return false unless win_array
+
     win_pieces = win_array[0]
     win_type = win_array[1]
 
