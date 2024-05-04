@@ -89,7 +89,7 @@ class GameBoard < TicTacToe
     populate_squares
     self.game_board.reduce '' do |display, pixel_row|
       display += pixel_row.flatten + "\n"
-      display
+      puts display
     end
   end
 
