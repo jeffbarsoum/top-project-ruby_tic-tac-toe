@@ -9,41 +9,67 @@ class TicTacToe
   attr_reader :game_board, :players, :stats, :sq_rows, :sq_cols
 
 
-  def populate_title
+  def display_title
+    msg_title <<-STRING
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+                                        Tic Tac Toe!
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+
+
+    STRING
+    puts msg_title
+  end
+
+  def display_spacing
+    msg_spacing <<-STRING
+
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+
+    STRING
+    puts msg_spacing
 
   end
 
-  def populate_hud
+  def display_hud
+    p1 = self.players[0]
+    p2 = self.players[1]
+    p1_score = self.stats[:score][p1.player.to_sym]
+    p2_score = self.stats[:score][p2.player.to_sym]
+    p1_turn = self.stats[:turn][p1.player.to_sym]
+    p2_score = self.stats[:turn][p2.player.to_sym]
+    rnd = self.stats[:round]
 
+    msg_hud <<-STRING
+
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+    Round ##{rnd}, Turn ##{p1_turn}
+    ------------------------------------------------------------------------------------
+    #{p1.name}'s Turn:
+    ------------------------------------------------------------------------------------
+    #{p1.name} (#{p1})                                            #{p2.name} (#{p2})
+    ----------------------                                        ----------------------
+    score: #{p1_score}                                            score: #{p2_score}
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+
+    STRING
+    puts msg_hud
   end
 
-  def display_screen
-    self.game_board.populate_board
-    populate_hud
-
-  end
-
-  def get_player_input
-
-  end
-
-  def assign_piece coordinates
-
-  end
 
   def play_turn
-    draw_title
-    draw_hud
-    draw_board
+    display_spacing
+    self.game_board.display_board
+    display_spacing
+    display_hud
 
     player_input = get_player_input
     assign_piece player_input
 
+    # move the top player (the one whose turn it currently is) last
+    @players.push @players.unshift
+
     check_winner
-  end
-
-  def play_again
-
   end
 
   def play_game
@@ -58,33 +84,16 @@ class TicTacToe
     end
   end
 
-  def next_player
-    # move the top player (the one whose turn it currently is) last
-    @players.push @players.unshift
-  end
-
   def initialize
-    cls_name = "TicTacToe"
-    func_name = "initialize"
-    begin
-      @players = []
-      until Player.get_free_players.empty? do
-        name = GetUserInput.return_user_input message, false
-        self.players.push Player.new name
-      end
-
-      @game_board = GameBoard.new
-      @stats = {
-        score: {x: 0, o: 0}
-        turn: {x: 0, o: 0}
-        round: 0
-        }
+    display_title
+    @players = []
+    until Player.get_free_players.empty? do
+      name = GetUserInput.return_user_input message, false
+      self.players.push Player.new name
     end
 
-  end
-
-  def change_turn
-
+    @game_board = GameBoard.new
+    @stats = GameStats.new
   end
 
 end
