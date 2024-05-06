@@ -1,10 +1,4 @@
 class GameStats
-  @stats = {
-    score: {x: 0, o: 0}
-    turn: {x: 0, o: 0}
-    round: 0
-    }
-
   def initialize
     @stats[:score] = {x: 0, o: 0}
     @stats[:turn] = {x: 0, o: 0}

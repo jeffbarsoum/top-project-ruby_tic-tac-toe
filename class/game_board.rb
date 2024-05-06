@@ -1,6 +1,5 @@
 require_relative "tic_tac_toe"
 require_relative "game_matrix"
-require_relative "../module/game_error"
 
 class GameBoard < TicTacToe
   SQUARE_SIZE = [3, 5]
@@ -8,12 +7,36 @@ class GameBoard < TicTacToe
   MAX_BOARD_SIZE = 7
   @@border = { top: "_", side: "|", bottom: "-", corner: "+"}
 
-  include GameError
 
   attr_reader :board_size, :game_matrix, :game_board, :sq_rows, :sq_cols
 
+  def game_error class_name, function_name, error_message
+    super class_name, function_name, error_message
+  end
 
-  def initialize board_size = DEFAULT_BOARD_SIZE, sq_rows = SQUARE_SIZE[0], sq_cols = SQUARE_SIZE[1]
+  def return_user_input message, multi_entry, user_options
+    super message, multi_entry, user_options
+  end
+
+  def parse_coordinates coordinates
+    row_coord = coordinates[0]
+    col_coord = coordinates[1]
+    board_size = self.board_size
+    max_row = (0..9).to_a[board_size - 1]
+    max_col = ('a'..'z').to_a[board_size - 1]
+
+    row = (0..9).to_a.find_index row_coord
+    col = ('a'..'z').to_a.find_index col_coord
+
+    is_valid_col = ('a'..max_col).to_a.include? col_coord
+    is_valid_row = (1..max_row).to_a.include? row_coord
+
+    [row, col] if is_valid_col && is_valid_row
+    false
+  end
+
+
+  def initialize sq_rows = SQUARE_SIZE[0], sq_cols = SQUARE_SIZE[1]
     cls_name = "GameBoard"
     func_name = "initialize"
     begin
@@ -25,11 +48,12 @@ class GameBoard < TicTacToe
 
         You can go as high as 7:
       STRING
-      board_size = GetUserInput.return_user_input msg_ask_game_size, false
+      board_size = self.return_user_input msg_ask_game_size, false
       is_size_int = board_size.to_i == board_size.to_i.to_s
       is_size_in_range = board_size.to_i.between?(DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE)
 
       raise GameSizeError unless is_size_int && is_size_in_range
+
 
       @board_size = board_size
       @sq_rows = sq_rows
@@ -44,8 +68,9 @@ class GameBoard < TicTacToe
         game size must be an integer between  #{DEFAULT_BOARD_SIZE} arrays with
         #{MAX_BOARD_SIZE}!
       STRING
-      puts GameError.game_error cls_name, func_name, err_message
+      puts self.game_error cls_name, func_name, err_message
     end
+
   end
 
   def populate_board
@@ -85,20 +110,6 @@ class GameBoard < TicTacToe
     end
   end
 
-  def display_board
-    populate_squares
-    self.game_board.reduce '' do |display, pixel_row|
-      display += pixel_row.flatten + "\n"
-      puts display
-    end
-  end
 
-  def is_correct_dim game_square
-    square_array = game_square.square
-    square_array.reduce true do |is_correct_rows, pixel_row|
-      break false unless square_array.length == self.sq_rows
-      is_correct_rows && pixel_row.length == self.sq_cols
-    end
-  end
 
 end
