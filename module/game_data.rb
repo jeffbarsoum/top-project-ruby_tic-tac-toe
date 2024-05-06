@@ -1,9 +1,15 @@
-require_relative "game_error"
+require_relative "../class/tic_tac_toe"
 
-module GameData
+module GameData < TicTacToe
   attr_reader :squares
 
-  include GameError
+  def game_error class_name, function_name, error_message
+    super class_name, function_name, error_message
+  end
+
+  def parse_coordinates coordinates
+    super coordinates
+  end
 
 
   def initialize
@@ -77,7 +83,7 @@ module GameData
       self.squares[piece]
     rescue GamePieceError
       msg_err = "piece must exist in squares hash!"
-      puts GameError.game_error cls_name, func_name, msg_err
+      puts self.game_error cls_name, func_name, msg_err
     end
   end
 
@@ -85,25 +91,22 @@ module GameData
     cls_name = "GameData"
     func_name = "nil_square"
     begin
-      unless player
-        row_coord = coordinates[0]
-        col_coord = coordinates[1]
+      is_valid_coord = self.parse_coordinates coordinates
 
-        is_valid_col = ('a'..'z').to_a.include? col_coord
-        is_valid_row = (1..9).to_a.include? row_coord
+      raise GamePieceError is_valid_coord
 
-        raise GamePieceError unless is_valid_col && is_valid_row
-
-        [
-          ['', '', '', '', ''],
-          ['', col_coord '', row_coord ''],
-          ['', '', '', '', '']
-        ]
-      end
+      [
+        ['', '', '', '', ''],
+        ['', col_coord '', row_coord ''],
+        ['', '', '', '', '']
+      ]
+    end
     rescue GamePieceError
       msg_err = "coordinates must be an alphabetic character followed by an integer!"
-      puts GameError.game_error cls_name, func_name, msg_err
+      puts self.game_error cls_name, func_name, msg_err
     end
   end
+
+
 
 end
