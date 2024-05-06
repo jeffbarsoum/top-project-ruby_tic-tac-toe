@@ -1,75 +1,52 @@
 require_relative "module/get_user_input"
-require_relative "module/game_error"
+require_relative "game_board"
+require_relative "player"
+require_relative "game_stats"
+require_relative "game_display"
 
 class TicTacToe
   SQUARE_CHOICES = [:x, :o, :nil]
 
   include GetUserInput
 
-  attr_reader :game_board, :players, :stats, :sq_rows, :sq_cols
+  attr_reader :game_board, :players, :stats, :display
 
 
-  def display_title
-    msg_title <<-STRING
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-                                        Tic Tac Toe!
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+  def game_error class_name, function_name, error_message
+    "#{class_name}.#{function_name}  ERROR: #{error_message}"
+  return
 
-
-    STRING
-    puts msg_title
+  def return_user_input message, multi_entry, user_options
+    GetUserInput.return_user_input message, multi_entry, user_options
   end
 
-  def display_spacing
-    msg_spacing <<-STRING
+  def initialize
+    @display = GameDisplay.new
+    self.display.display_title
 
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+    @players = []
+    until Player.get_free_players.empty? do
+      name = self.return_user_input message, false
+      self.players.push Player.new name
+    end
 
-    STRING
-    puts msg_spacing
-
+    @game_board = GameBoard.new
+    @stats = GameStats.new
   end
-
-  def display_hud
-    p1 = self.players[0]
-    p2 = self.players[1]
-    p1_score = self.stats[:score][p1.player.to_sym]
-    p2_score = self.stats[:score][p2.player.to_sym]
-    p1_turn = self.stats[:turn][p1.player.to_sym]
-    p2_score = self.stats[:turn][p2.player.to_sym]
-    rnd = self.stats[:round]
-
-    msg_hud <<-STRING
-
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-    Round ##{rnd}, Turn ##{p1_turn}
-    ------------------------------------------------------------------------------------
-    #{p1.name}'s Turn:
-    ------------------------------------------------------------------------------------
-    #{p1.name} (#{p1})                                            #{p2.name} (#{p2})
-    ----------------------                                        ----------------------
-    score: #{p1_score}                                            score: #{p2_score}
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-
-    STRING
-    puts msg_hud
-  end
-
 
   def play_turn
-    display_spacing
-    self.game_board.display_board
-    display_spacing
-    display_hud
+    current_player = self.players[0]
+    matrix = self.game_board.game_matrix
+    self.display.display_board self.game_board
+    self.display.display_hud self.players, self.stats
 
-    player_input = get_player_input
-    assign_piece player_input
+    coordinates = self.return_user_input "#{current_player.name}, your turn!"
+    matrix.assign_piece current_player.player, coordinates
 
     # move the top player (the one whose turn it currently is) last
     @players.push @players.unshift
 
-    check_winner
+    matrix.check_winner
   end
 
   def play_game
@@ -77,23 +54,17 @@ class TicTacToe
     until is_quit do
       is_winner = false
       until is_winner do
-        is_winner = play_turn
+        is_winner = self.play_turn
       end
-      assign_winner is_winner
-      is_quit = play_again
+      self.game_board.game_matrix.assign_winner is_winner
+      msg = "#{current_player.name}, your turn!"
+      is_quit = coordinates = self.return_user_input
     end
   end
 
-  def initialize
-    display_title
-    @players = []
-    until Player.get_free_players.empty? do
-      name = GetUserInput.return_user_input message, false
-      self.players.push Player.new name
-    end
+  def next_round
 
-    @game_board = GameBoard.new
-    @stats = GameStats.new
   end
+
 
 end
