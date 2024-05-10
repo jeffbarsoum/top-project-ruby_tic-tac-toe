@@ -59,7 +59,7 @@ class GameBoard < TicTacToe
       @sq_rows = sq_rows
       @sq_cols = sq_cols
 
-      @game_matrix = GameMatrix.new self.board_size, self.sq_rows, self.sq_cols
+      @game_matrix = GameMatrix.new self.board_size
 
       populate_board
       populate_squares
