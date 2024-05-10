@@ -1,12 +1,17 @@
 require_relative "tic_tac_toe"
 
 class GameDisplay < TicTacToe
-  def display_title
+  def display_title choices
     msg_title <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
                                         Tic Tac Toe!
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
 
+    Please press a key to choose your option:
+
+    Start: "#{choices[:start]}"
+    Load Save: "#{choices[:load]}"
+    Quit: "#{choices[:quit]}"
 
     STRING
     puts msg_title
@@ -45,6 +50,32 @@ class GameDisplay < TicTacToe
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
 
     STRING
+    puts msg_hud
+  end
+
+  def display_saves game_data
+    print_save_list = ""
+    game_data.each_with_index do |save, i|
+      str_time = save.timestamp.strftime("%d/%m/%Y, %I:%M %p")
+      str_name = save.name
+      p1_score = "#{save.players[0].name}: #{save.players[0].score}"
+      p2_score = "#{save.players[1].name}: #{save.players[1].score}"
+
+      print_save_list += "${i + 1}) #{str_time} - #{str_name}:\n   #{p1_score}\n   #{p2_score}\n\n"
+    end
+
+    msg_save <<-STRING
+
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+    Choose your save, input the number shown to play your save:
+    ------------------------------------------------------------------------------------
+    #{print_save_list}
+    ------------------------------------------------------------------------------------
+    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
+
+    STRING
+
+    self.display_title
     puts msg_hud
   end
 
