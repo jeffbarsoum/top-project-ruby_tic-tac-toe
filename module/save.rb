@@ -4,7 +4,7 @@ module Save
 
   attr_reader :save_directory, :data_list
 
-  def initialize save_directory
+  def initialize save_directory = "save_data"
     # making path relative to app's parent directory
     @save_directory = "../#{save_directory}"
     @data_list = self.get_save_data_list self.save_directory
