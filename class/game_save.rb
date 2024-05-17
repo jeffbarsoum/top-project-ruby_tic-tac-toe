@@ -2,15 +2,15 @@ require_relative "../module/save"
 
 class GameSave < Save
 
-  attr_reader :game_data, :save_file = "game_save"
+  attr_reader :game_data, :key
 
-  def initialize save_directory, save_file = "game_save"
+  def initialize key = "game_save"
     super save_directory
 
-    @save_file = save_file
-    load_file = self.load_file save_file
+    @save_file = key
+    load_file = self.load_file
     @game_data = [] unless load_file
-    @game_data = self.load_file save_file
+    @game_data = self.load_file
 
   end
 
@@ -39,7 +39,13 @@ class GameSave < Save
     @game_data.push save_hash
   end
 
+  def save_file
+    super self.game_data, self.key, true
+  end
 
-
+  def load_file
+    load_file = super self.key
+    return @game_data = load_file || []
+  end
 
 end
