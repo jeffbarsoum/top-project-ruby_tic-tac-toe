@@ -1,16 +1,16 @@
 require_relative "tic_tac_toe"
-require_relative "game_matrix"
+require_relative "matrix"
 
-class GameBoard < TicTacToe
+class Board < TicTacToe
   SQUARE_SIZE = [3, 5]
   DEFAULT_BOARD_SIZE = 3
   MAX_BOARD_SIZE = 7
   @@border = { top: "_", side: "|", bottom: "-", corner: "+"}
 
 
-  attr_reader :board_size, :game_matrix, :game_board, :sq_rows, :sq_cols
+  attr_reader :board_size, :matrix, :board, :sq_rows, :sq_cols
 
-  def game_error class_name, function_name, error_message
+  def error class_name, function_name, error_message
     super class_name, function_name, error_message
   end
 
@@ -37,10 +37,10 @@ class GameBoard < TicTacToe
 
 
   def initialize sq_rows = SQUARE_SIZE[0], sq_cols = SQUARE_SIZE[1]
-    cls_name = "GameBoard"
+    cls_name = "Board"
     func_name = "initialize"
     begin
-      msg_ask_game_size <<-STRING
+      msg_ask_size <<-STRING
         How big do you want the Tic Tac Toe Board to be?
 
         The default is 3, so 3 rows and 3 columns, and 3
@@ -48,27 +48,27 @@ class GameBoard < TicTacToe
 
         You can go as high as 7:
       STRING
-      board_size = self.return_user_input msg_ask_game_size, false
+      board_size = self.return_user_input msg_ask_size, false
       is_size_int = board_size.to_i == board_size.to_i.to_s
       is_size_in_range = board_size.to_i.between?(DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE)
 
-      raise GameSizeError unless is_size_int && is_size_in_range
+      raise SizeError unless is_size_int && is_size_in_range
 
 
       @board_size = board_size
       @sq_rows = sq_rows
       @sq_cols = sq_cols
 
-      @game_matrix = GameMatrix.new self.board_size
+      @matrix = Matrix.new self.board_size
 
       populate_board
       populate_squares
-    rescue GameSizeError
+    rescue SizeError
       err_message <<-STRING
         game size must be an integer between  #{DEFAULT_BOARD_SIZE} arrays with
         #{MAX_BOARD_SIZE}!
       STRING
-      puts self.game_error cls_name, func_name, err_message
+      puts self.error cls_name, func_name, err_message
     end
 
   end
@@ -89,13 +89,13 @@ class GameBoard < TicTacToe
         pixel_row.push @@border[:side] if is_col_border && !is_row_border
         pixel_row.push nil unless is_col_border || is_row_border
 
-        self.game_board.push pixel_row
+        self.board.push pixel_row
       end
     end
   end
 
   def populate_squares
-    matrix = self.game_matrix.game_matrix
+    matrix = self.matrix.matrix
     matrix.each_with_index do |row, i|
       starting_row = 1 + i * (1 + self.sq_rows)
       ending_row = starting_row + self.sq_rows
@@ -104,7 +104,7 @@ class GameBoard < TicTacToe
         ending_col = starting_col + self.sq_cols
         piece.square.each_with_index do |piece_row, k|
           piece_row_id = starting_row + k
-          self.game_board[piece_row_id][starting_col, self.sq_rows] = piece_row
+          self.board[piece_row_id][starting_col, self.sq_rows] = piece_row
         end
       end
     end

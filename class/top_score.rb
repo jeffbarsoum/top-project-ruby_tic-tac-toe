@@ -24,7 +24,7 @@ def class TopScore < Save
 
   def load_file
     load_file = super self.key
-    return @game_data = load_file || []
+    return @data = load_file || []
   end
 
 end

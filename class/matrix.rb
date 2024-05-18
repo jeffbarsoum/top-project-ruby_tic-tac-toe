@@ -1,11 +1,11 @@
-require_relative "game_board"
-require_relative "game_square"
+require_relative "board"
+require_relative "square"
 
-class GameMatrix < GameBoard
+class Matrix < Board
 
-  attr_reader :game_matrix
+  attr_reader :matrix
 
-  def game_error class_name, function_name, error_message
+  def error class_name, function_name, error_message
     super class_name, function_name, error_message
   end
 
@@ -19,35 +19,35 @@ class GameMatrix < GameBoard
   end
 
   def populate_matrix board_size
-    cls_name = "GameMatrix"
+    cls_name = "Matrix"
     func_name = "populate_matrix"
     begin
-      raise GameMatrixError unless self.game_matrix.empty?
+      raise MatrixError unless self.matrix.empty?
       board_size.times do |row|
         row_id = row + 1
         row_array = []
         board_size.times do |col|
           col_id = 'a'..'z'[col]
           coord = col_id + row_id.to_s
-          new_game_square = GameSquare.new coord
+          new_square = Square.new coord
 
-          row_array.push new_game_square
-          self.game_matrix.push row_array
+          row_array.push new_square
+          self.matrix.push row_array
         end
       end
-    rescue GameMatrixError
+    rescue MatrixError
       msg_bad_player_error = "game matrix already has pieces in it!"
-      puts self.game_error cls_name, func_name, msg_bad_player_error
+      puts self.error cls_name, func_name, msg_bad_player_error
 
     end
   end
 
   def empty_matrix
-    @game_matrix = []
+    @matrix = []
   end
 
   def check_row
-    self.game_matrix.each_with_index do |row, i|
+    self.matrix.each_with_index do |row, i|
       is_match =  row.uniq.count == 1
       return [row[0], :horizontal] if is_match
     end
@@ -55,10 +55,10 @@ class GameMatrix < GameBoard
   end
 
   def check_column
-    self.game_matrix.each_with_index do |row, i|
+    self.matrix.each_with_index do |row, i|
       col_array = []
-      self.game_matrix.each_with_index do |col, i|
-        col_array.push self.game_matrix[row][col]
+      self.matrix.each_with_index do |col, i|
+        col_array.push self.matrix[row][col]
       end
       is_match =  col_array.uniq.count == 1
       return [col_array, :vertical] if is_match
@@ -69,10 +69,10 @@ class GameMatrix < GameBoard
   def check_diagonal
     left_diagonal_array = []
     right_diagonal_array = []
-    self.game_matrix.each_with_index do |row, i|
+    self.matrix.each_with_index do |row, i|
 
-      left_diagonal_array.push self.game_matrix[row][row]
-      right_diagonal_array.push self.game_matrix[row][self.game_matrix.length - 1 - row]
+      left_diagonal_array.push self.matrix[row][row]
+      right_diagonal_array.push self.matrix[row][self.matrix.length - 1 - row]
 
     end
 
@@ -100,7 +100,7 @@ class GameMatrix < GameBoard
 
   def assign_piece player, coordinates
     coord = self.parse_coordinates coordinates
-    self.game_matrix[coord[0]][coord[1]].player = player.to_sym
+    self.matrix[coord[0]][coord[1]].player = player.to_sym
   end
 
   def assign_winner

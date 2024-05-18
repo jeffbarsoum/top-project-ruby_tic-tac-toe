@@ -1,14 +1,14 @@
-require_relative "game_matrix"
-require_relative "../module/game_data"
+require_relative "matrix"
+require_relative "../module/data"
 
 
-class GameSquare < GameMatrix
-  include GameData
+class Square < Matrix
+  include Data
 
   attr_reader :coordinates, :player, :square
 
 
-  def game_error class_name, function_name, error_message
+  def error class_name, function_name, error_message
     super class_name, function_name, error_message
   end
 
@@ -18,7 +18,7 @@ class GameSquare < GameMatrix
 
 
   def initialize coordinates, player = nil
-    cls_name = "GameSquare"
+    cls_name = "Square"
     func_name = "initialize"
     begin
       player_id = player.to_sym
@@ -33,19 +33,19 @@ class GameSquare < GameMatrix
       self.square
     rescue BadPlayerError
       msg_bad_player_error = "choices are 'x', 'o' or 'nil' (for the game board)"
-      puts self.game_error cls_name, func_name, msg_bad_player_error
+      puts self.error cls_name, func_name, msg_bad_player_error
     rescue BadPixelError
       msg_bad_pixel_error <<-STRING
         each entry in the square array represents one pixel, and must be
         exactly one character long
       STRING
-      puts self.game_error cls_name, func_name, msg_bad_pixel_error
+      puts self.error cls_name, func_name, msg_bad_pixel_error
     rescue SquareSizeError
       msg_square_size_error <<-STRING
         drawn square must be an array containing #{sq_rows} arrays,
         each containing #{sq_cols} string entries
       STRING
-      puts self.game_error cls_name, func_name, msg_square_size_error
+      puts self.error cls_name, func_name, msg_square_size_error
     end
   end
 
@@ -67,7 +67,7 @@ class GameSquare < GameMatrix
 
 
   def assign_player player
-    err_prefix = "GameSquare.assign_player ERROR"
+    err_prefix = "Square.assign_player ERROR"
     begin
       raise PlayerAssignError unless @player.nil?
       @player = player
@@ -76,12 +76,12 @@ class GameSquare < GameMatrix
       msg_player_assigned_error <<-STRING
         square #{coordinates} is already assigned to player #{player}
       STRING
-      puts self.game_error err_prefix, msg_player_assigned_error
+      puts self.error err_prefix, msg_player_assigned_error
     end
   end
 
   def assign_win win_type
-    err_prefix = "GameSquare.assign_win ERROR"
+    err_prefix = "Square.assign_win ERROR"
     begin
       raise WinAssignError if @player.nil?
       @square = SQUARES[self.player.to_sym][win_type.to_sym]
@@ -90,7 +90,7 @@ class GameSquare < GameMatrix
         square must be assigned a player before it can be assigned
         a win!
       STRING
-      puts self.game_error err_prefix, msg_win_assigned_error
+      puts self.error err_prefix, msg_win_assigned_error
     end
 
   def to_s

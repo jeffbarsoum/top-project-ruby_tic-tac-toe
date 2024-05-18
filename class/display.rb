@@ -1,7 +1,7 @@
 require_relative "tic_tac_toe"
 
-class GameDisplay < TicTacToe
-  def display_title choices
+class Display < TicTacToe
+  def title choices
     msg_title <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
                                         Tic Tac Toe!
@@ -14,10 +14,10 @@ class GameDisplay < TicTacToe
     Quit: "#{choices[:quit]}"
 
     STRING
-    puts msg_title
+    msg_title
   end
 
-  def display_spacing
+  def spacing
     msg_spacing <<-STRING
 
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
@@ -28,7 +28,7 @@ class GameDisplay < TicTacToe
 
   end
 
-  def display_hud players, stats
+  def hud players, stats
     p1 = players[0]
     p2 = players[1]
     p1_score = stats[:score][p1.player.to_sym]
@@ -50,12 +50,12 @@ class GameDisplay < TicTacToe
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
 
     STRING
-    puts msg_hud
+    msg_hud
   end
 
-  def display_saves game_data
+  def saves data
     print_save_list = ""
-    game_data.each_with_index do |save, i|
+    data.each_with_index do |save, i|
       str_time = save.timestamp.strftime("%d/%m/%Y, %I:%M %p")
       str_name = save.name
       p1_score = "#{save.players[0].name}: #{save.players[0].score}"
@@ -75,11 +75,11 @@ class GameDisplay < TicTacToe
 
     STRING
 
-    self.display_title
-    puts msg_hud
+    self.title
+    msg_hud
   end
 
-  def display_win player
+  def win player
     player_win_msg = "*** #{player.name} Wins!! Ballin... ***"
     player_win_msg += player_win_msg.length % 2 == 0 ? "" : " "
     spacing_length = ((38 - player_win_msg.length) / 2).to_i
@@ -133,10 +133,10 @@ Quit: "#{choices[:quit]}"
 
   end
 
-  def display_board game_board
-    game_board.populate_squares
-    game_board.reduce '' do |display, pixel_row|
+  def board board
+    board.populate_squares
+    board.reduce '' do |display, pixel_row|
       display += pixel_row.flatten + "\n"
-      puts display
+      display
     end
   end
