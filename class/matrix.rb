@@ -49,7 +49,7 @@ class Matrix < Board
   def check_row
     self.matrix.each_with_index do |row, i|
       is_match =  row.uniq.count == 1
-      return [row[0], :horizontal] if is_match
+      return { squares: row[0], player: row[0][0].player, win_type: :horizontal } if is_match
     end
     return false
   end
@@ -61,7 +61,7 @@ class Matrix < Board
         col_array.push self.matrix[row][col]
       end
       is_match =  col_array.uniq.count == 1
-      return [col_array, :vertical] if is_match
+      return { squares: col_array, player: col_array[0].player, win_type: :vertical } if is_match
     end
     return false
   end
@@ -77,10 +77,12 @@ class Matrix < Board
     end
 
     is_left_match =  left_diagonal_array.uniq.count == 1
-    return [left_diagonal_array, :left_diagonal] if is_left_match
+    return { squares: left_diagonal_array, player: left_diagonal_array[0].player, win_type: :left_diagonal } if is_left_match
+
 
     is_right_match =  right_diagonal_array.uniq.count == 1
     return [right_diagonal_array, :right_diagonal] if is_right_match
+    return { squares: right_diagonal_array, player: right_diagonal_array[0].player, win_type: :right_diagonal } if is_right_match
 
     return false
   end
