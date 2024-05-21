@@ -11,7 +11,7 @@ module Save
 
   end
 
-  def save_file data, key, overwrite? = false
+  def save_file data, key, overwrite? = true
     can_write_file = !self.is_data_exists || overwrite
     return false unless can_write_file
     File.open "#{self.save_directory}#{key}.yml", "w" { |file| file.write data.to_yaml }
