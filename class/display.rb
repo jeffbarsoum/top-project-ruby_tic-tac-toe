@@ -1,7 +1,42 @@
 require_relative "tic_tac_toe"
 
 class Display < TicTacToe
+  attr_accessor :active
+
+
+  def return_user_input message, multi_entry, user_options
+    super message, multi_entry, user_options
+  end
+
+  def get_opts_array opts_hash
+    super opts_hash
+  end
+
+  def user_options command_arr
+    super command_arr
+  end
+
+  def screen screen, command_arr
+    opts_hash = self.user_options command_arr
+    opts_arr = self.get_opts_array opts_hash
+    screen_str = self.method(screen)command_arr
+    screen_str += self.opts_display opts_hash
+    self.return_user_input screen_str, false, opts_arr
+  end
+
+  def opts_display opts_hash, vertical = false
+    spacing = vertical ? "\n" : " | "
+    return_string = "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
+    # concatenate all options in a given hash
+    return_string += opts_hash.reduce return_string do |display, (option, input)|
+      display += "#{option.to_s.split('_').map { |word| word.capitalize }.join " "}: #{input}#{spacing}"
+      display
+    end
+    return_string += "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
+  end
+
   def title choices
+
     msg_title <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
                                         Tic Tac Toe!
@@ -9,9 +44,7 @@ class Display < TicTacToe
 
     Please press a key to choose your option:
 
-    Start: "#{choices[:start]}"
-    Load Save: "#{choices[:load]}"
-    Quit: "#{choices[:quit]}"
+    #{self.opts_display choices}
 
     STRING
     msg_title
@@ -79,7 +112,7 @@ class Display < TicTacToe
     msg_hud
   end
 
-  def win player
+  def win player, choices
     player_win_msg = "*** #{player.name} Wins!! Ballin... ***"
     player_win_msg += player_win_msg.length % 2 == 0 ? "" : " "
     spacing_length = ((38 - player_win_msg.length) / 2).to_i
@@ -125,9 +158,7 @@ Thanks for playing! What would you like to do?
 
 XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
 
-Play Again: "#{choices[:start]}"
-Save: "#{choices[:save]}"
-Quit: "#{choices[:quit]}"
+#{(self.opts_display choices).replace('Start', 'Play Again')}
 
     STRING
 
