@@ -20,6 +20,23 @@ class TicTacToe
 
   attr_reader :board, :players, :stats, :display, :save, :is_quit
 
+
+  def initialize save_data = false
+    @is_quit = false
+    @display = Display.new
+    @save = GameSave.new
+
+    opts_hash = self.user_options :start, :load, :quit
+    opts = self.get_opts_arrayj opts_hash
+
+    # Display title screen
+    title_choice = self.return_user_input self.display.title, false, opts
+
+    # Launch appropriate screen
+    self.process_user_option title_choice
+
+  end
+
   def process_user_option input
     return unless USER_OPTIONS.has_val? input
     command = USER_OPTIONS.key input
@@ -28,16 +45,7 @@ class TicTacToe
   end
 
   def send_user_option command
-    case command
-    when :start
-      self.start
-    when :quit
-      self.quit
-    when :save
-      self.save
-    when :load
-      self.load
-    end
+    self.send command
   end
 
   def get_current_player
@@ -101,21 +109,7 @@ class TicTacToe
     end
   end
 
-  def initialize save_data = false
-    @is_quit = false
-    @display = Display.new
-    @save = GameSave.new
 
-    opts_hash = self.user_options :start, :load, :quit
-    opts = self.get_opts_arrayj opts_hash
-
-    # Display title screen
-    title_choice = self.return_user_input self.display.title, false, opts
-
-    # Launch appropriate screen
-    self.process_user_option title_choice
-
-  end
 
   def play_turn
     current_player = self.players[0]
@@ -144,10 +138,5 @@ class TicTacToe
       self.is_quit = coordinates = self.return_user_input
     end
   end
-
-  def next_round
-
-  end
-
 
 end
