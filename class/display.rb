@@ -1,6 +1,13 @@
 require_relative "tic_tac_toe"
 
 class Display < TicTacToe
+  DISPLAY_CHOICES = {
+    title: { choices: [:start, :load, :save, :quit], vertical: true },
+    load: { choices: [:back, :quit], vertical: false },
+    game: { choices: [:save, :quit], vertical: true },
+    win: { choices: [:play_again, :save, :quit], vertical: true },
+  }
+
   attr_accessor :active
 
 
@@ -16,10 +23,18 @@ class Display < TicTacToe
     super command_arr
   end
 
-  def screen screen, command_arr
+  def board
+    super
+  end
+
+  def draw_board
+    self.board.draw_board
+  end
+
+  def screen screen, args_arr, command_arr
     opts_hash = self.user_options command_arr
     opts_arr = self.get_opts_array opts_hash
-    screen_str = self.method(screen)command_arr
+    screen_str = self.method(screen)[args_arr]
     screen_str += self.opts_display opts_hash
     self.return_user_input screen_str, false, opts_arr
   end
@@ -61,7 +76,7 @@ class Display < TicTacToe
 
   end
 
-  def hud players, stats
+  def game players, stats
     p1 = players[0]
     p2 = players[1]
     p1_score = stats[:score][p1.player.to_sym]
@@ -86,7 +101,7 @@ class Display < TicTacToe
     msg_hud
   end
 
-  def saves data
+  def load data
     print_save_list = ""
     data.each_with_index do |save, i|
       str_time = save.timestamp.strftime("%d/%m/%Y, %I:%M %p")
@@ -112,7 +127,7 @@ class Display < TicTacToe
     msg_hud
   end
 
-  def win player, choices
+  def win player, choices = [:play_again, :save, :quit]
     player_win_msg = "*** #{player.name} Wins!! Ballin... ***"
     player_win_msg += player_win_msg.length % 2 == 0 ? "" : " "
     spacing_length = ((38 - player_win_msg.length) / 2).to_i
@@ -162,12 +177,4 @@ XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXX
 
     STRING
 
-  end
-
-  def board board
-    board.populate_squares
-    board.reduce '' do |display, pixel_row|
-      display += pixel_row.flatten + "\n"
-      display
-    end
   end
