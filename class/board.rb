@@ -110,6 +110,12 @@ class Board < TicTacToe
     end
   end
 
-
+  def draw_board
+    self.populate_squares
+    self.board.reduce '' do |display, pixel_row|
+      display += pixel_row.flatten + "\n"
+      display
+    end
+  end
 
 end
