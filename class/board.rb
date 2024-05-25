@@ -18,6 +18,23 @@ class Board < TicTacToe
     super message, multi_entry, user_options
   end
 
+  def parse_coordinates coordinates
+    row_coord = coordinates[0]
+    col_coord = coordinates[1]
+    board_size = self.board_size
+    max_row = (0..9).to_a[board_size - 1]
+    max_col = ('a'..'z').to_a[board_size - 1]
+
+    row = (0..9).to_a.find_index row_coord
+    col = ('a'..'z').to_a.find_index col_coord
+
+    is_valid_col = ('a'..max_col).to_a.include? col_coord
+    is_valid_row = (1..max_row).to_a.include? row_coord
+
+    [row, col] if is_valid_col && is_valid_row
+    false
+  end
+
 
   def initialize sq_rows = SQUARE_SIZE[0], sq_cols = SQUARE_SIZE[1]
     cls_name = "Board"

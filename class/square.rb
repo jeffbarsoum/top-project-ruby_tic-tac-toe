@@ -12,10 +12,6 @@ class Square < Matrix
     super class_name, function_name, error_message
   end
 
-  def parse_coordinates coordinates
-    super coordinates
-  end
-
 
   def initialize coordinates, player = nil
     cls_name = "Square"
