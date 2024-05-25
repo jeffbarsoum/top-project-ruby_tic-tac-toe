@@ -31,7 +31,7 @@ class Display < TicTacToe
     self.board.draw_board
   end
 
-  def screen screen, args_arr, command_arr
+  def screen screen, args_arr, opts_arr, command_arr
     opts_hash = self.user_options command_arr
     opts_arr = self.get_opts_array opts_hash
     screen_str = self.method(screen)[args_arr]
