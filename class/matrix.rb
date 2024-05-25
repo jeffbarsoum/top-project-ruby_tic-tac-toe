@@ -9,10 +9,6 @@ class Matrix < Board
     super class_name, function_name, error_message
   end
 
-  def parse_coordinates coordinates
-    super coordinates
-  end
-
 
   def initialize board_size
     self.populate_matrix board_size
@@ -29,10 +25,10 @@ class Matrix < Board
         board_size.times do |col|
           col_id = 'a'..'z'[col]
           coord = col_id + row_id.to_s
-          new_square = Square.new coord
+          new_square = Square.new self.parse_coordinates coord
 
           row_array.push new_square
-          self.matrix.push row_array
+          @matrix.push row_array
         end
       end
     rescue MatrixError
@@ -45,6 +41,58 @@ class Matrix < Board
   def empty_matrix
     @matrix = []
   end
+
+  def parse_coordinates coordinates
+    row_coord = coordinates[0]
+    col_coord = coordinates[1]
+    board_size = self.board_size
+    max_row = (0..9).to_a[board_size - 1]
+    max_col = ('a'..'z').to_a[board_size - 1]
+
+    row = (0..9).to_a.find_index row_coord
+    col = ('a'..'z').to_a.find_index col_coord
+
+    is_valid_col = ('a'..max_col).to_a.include? col_coord
+    is_valid_row = (1..max_row).to_a.include? row_coord
+
+    return { row: row, col: col, text: coordinates } if is_valid_col && is_valid_row
+    false
+  end
+
+  def get_piece coordinates
+    coord = self.parse_coordinates coordinates
+    self.matrix[coord[:row]][coord[:col]]
+  end
+
+  def assign_piece player, coordinates
+    self.get_piece coordinates .assign_player player
+  end
+
+  def check_winner
+    is_column_win = self.check_column
+    return is_column_win if is_column_win
+
+    is_row_win = self.check_row
+    return is_row_win if is_row_win
+
+    is_diagonal_win = self.check_diagonal
+    return is_diagonal_win if is_diagonal_win
+
+    false
+  end
+
+  def assign_winner
+    win_array = self.check_winner
+    return false unless win_array
+
+    win_pieces = win_array[0]
+    win_type = win_array[1]
+
+    win_pieces.each |piece| do { piece.assign_win win_type }
+  end
+
+
+  private
 
   def check_row
     self.matrix.each_with_index do |row, i|
@@ -85,34 +133,6 @@ class Matrix < Board
     return { squares: right_diagonal_array, player: right_diagonal_array[0].player, win_type: :right_diagonal } if is_right_match
 
     return false
-  end
-
-  def check_winner
-    is_column_win = self.check_column
-    return is_column_win if is_column_win
-
-    is_row_win = self.check_row
-    return is_row_win if is_row_win
-
-    is_diagonal_win = self.check_diagonal
-    return is_diagonal_win if is_diagonal_win
-
-    false
-  end
-
-  def assign_piece player, coordinates
-    coord = self.parse_coordinates coordinates
-    self.matrix[coord[0]][coord[1]].player = player.to_sym
-  end
-
-  def assign_winner
-    win_array = self.check_winner
-    return false unless win_array
-
-    win_pieces = win_array[0]
-    win_type = win_array[1]
-
-    win_pieces.each |piece| do { piece.assign_win win_type }
   end
 
 end
