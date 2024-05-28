@@ -4,7 +4,7 @@ require_relative "board"
 require_relative "player"
 require_relative "stats"
 require_relative "display"
-require_relative "save"
+require_relative "game_save"
 
 class TicTacToe
   SQUARE_CHOICES = [:x, :o, :nil]
