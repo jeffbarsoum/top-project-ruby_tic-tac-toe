@@ -56,11 +56,14 @@ class Square < Matrix
     end
   end
 
+  def is_assigned
+    self.player ? true : false
+  end
 
   def assign_player player
     err_prefix = "Square.assign_player ERROR"
     begin
-      raise PlayerAssignError unless @player.nil?
+      raise PlayerAssignError if self.is_assigned 
       @player = player
       @square = Data.square player
     rescue PlayerAssignError
