@@ -13,23 +13,18 @@ class Square < Matrix
   end
 
 
-  def initialize coordinates, player = nil
+  def initialize coordinates
     cls_name = "Square"
     func_name = "initialize"
     begin
-      player_id = player.to_sym
-      @square = SQUARES[player_id]
+      @player = player.to_sym
+      @square = Data.nil_square coordinates[:text]
       @coordinates = coordinates
-      @player = player
 
-      raise BadPlayerError unless SQUARES.key? player_id
-      raise BadPixelError unless is_correct_pixel
+      raise BadPixelError unless self.is_correct_pixel
       raise SquareSizeError unless self.is_correct_dim
 
       self.square
-    rescue BadPlayerError
-      msg_bad_player_error = "choices are 'x', 'o' or 'nil' (for the game board)"
-      puts self.error cls_name, func_name, msg_bad_player_error
     rescue BadPixelError
       msg_bad_pixel_error <<-STRING
         each entry in the square array represents one pixel, and must be
@@ -67,7 +62,7 @@ class Square < Matrix
     begin
       raise PlayerAssignError unless @player.nil?
       @player = player
-      @square = SQUARES[player.to_sym][:place]
+      @square = Data.square player
     rescue PlayerAssignError
       msg_player_assigned_error <<-STRING
         square #{coordinates} is already assigned to player #{player}
@@ -76,11 +71,13 @@ class Square < Matrix
     end
   end
 
+
+
   def assign_win win_type
     err_prefix = "Square.assign_win ERROR"
     begin
       raise WinAssignError if @player.nil?
-      @square = SQUARES[self.player.to_sym][win_type.to_sym]
+      @square = Data.square self.player, win_type.to_sym
     rescue WinAssignError
       msg_win_assigned_error <<-STRING
         square must be assigned a player before it can be assigned

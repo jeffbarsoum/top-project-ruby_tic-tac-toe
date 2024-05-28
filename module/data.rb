@@ -73,15 +73,16 @@ module Data < TicTacToe
 
   # if player is nil, piece should be a string of coordinates
   # otherwise, it's a symbol representing the placement type
-  def squares piece, player = nil
+  def square player, piece_type = :place
     cls_name = "Data"
     func_name = "squares"
     begin
-      return self.nil_square piece unless player
 
-      raise PieceError unless self.squares.key? piece
-      self.squares[piece]
-    rescue PieceError
+      raise DataError unless self.squares.key? player
+      raise DataError unless self.squares[player].key? piece_type
+
+      self.squares[player][piece_type]
+    rescue DataError
       msg_err = "piece must exist in squares hash!"
       puts self.error cls_name, func_name, msg_err
     end
@@ -91,9 +92,12 @@ module Data < TicTacToe
     cls_name = "Data"
     func_name = "nil_square"
     begin
-      is_valid_coord = self.parse_coordinates coordinates
+      row_coord = coordinates[1]
+      col_coord = coordinates[0]
 
-      raise PieceError is_valid_coord
+      is_valid_coord = "a".."z".to_a.include? col_coord && 1..9.to_a.include? row_coord
+
+      raise DataError unless is_valid_coord
 
       [
         ['', '', '', '', ''],
@@ -101,7 +105,7 @@ module Data < TicTacToe
         ['', '', '', '', '']
       ]
     end
-    rescue PieceError
+    rescue DataError
       msg_err = "coordinates must be an alphabetic character followed by an integer!"
       puts self.error cls_name, func_name, msg_err
     end
