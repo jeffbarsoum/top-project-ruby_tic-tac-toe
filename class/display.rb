@@ -32,11 +32,10 @@ class Display < TicTacToe
   end
 
   def screen screen, args_arr, opts_arr, command_arr
-    opts_hash = self.user_options command_arr
-    opts_arr = self.get_opts_array opts_hash
+    command_hash = self.user_options command_arr
     screen_str = self.method(screen)[args_arr]
-    screen_str += self.opts_display opts_hash
-    self.return_user_input screen_str, false, opts_arr
+    screen_str += self.opts_display command_hash
+    self.return_user_input screen_str, false, opts_arr + command_arr
   end
 
   def opts_display opts_hash, vertical = false
