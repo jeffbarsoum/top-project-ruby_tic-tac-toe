@@ -18,21 +18,20 @@ class FiniteStateMachine < TicTacToe
     @instances = []
   end
 
-  def load_state state_file, args, state_commands, screen_commands
+  def load_state state_file, args, state_cmds, screen_cmds
     return false unless self.state_files.include? state_file
-    require state
+    require state_file
 
-    state_class_name =  self.parse_state_file state_file
-    state_class = Object.const_get state_class_name
+    cls_name =  self.parse_state_file stt_fl
+    cls = Object.const_get cls_name
 
-    if state_class
-      self.classes.unshift { state_class_name => state_class }
-
-      state_class_instance = state_class.new args, state_commands, screen_commands
-      self.instances.unshift { state_class_name => state_class_instance }
+    if cls
+      self.classes.unshift { cls_name => cls }
+      cls_instance = cls.new args, state_cmds, screen_cmds
+      self.instances.unshift { cls_name => cls_instance }
     end
 
-    return state_class_instance
+    cls_instance
   end
 
   def unload_state class_name
