@@ -22,7 +22,7 @@ class FiniteStateMachine < TicTacToe
     return false unless self.state_files.include? state_file
     require state_file
 
-    cls_name =  self.parse_state_file stt_fl
+    cls_name =  self.parse_state_file state_file
     cls = Object.const_get cls_name
 
     if cls
