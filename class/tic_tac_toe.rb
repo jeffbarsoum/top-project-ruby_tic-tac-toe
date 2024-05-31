@@ -1,10 +1,10 @@
-require_relative "module/get_user_input"
-require_relative "module/error"
-require_relative "board"
-require_relative "player"
-require_relative "stats"
-require_relative "display"
-require_relative "game_save"
+require "get_user_input"
+require "error"
+require "board"
+require "player"
+require "stats"
+require "display"
+require "game_save"
 
 class TicTacToe
   SQUARE_CHOICES = [:x, :o, :nil]
@@ -12,11 +12,15 @@ class TicTacToe
     start: "o",
     quit: "q",
     save: "s",
-    load: "l"
+    load: "l",
+    back: "b",
+    reset: "r"
   }
+
 
   include GetUserInput
   include Error
+
 
   attr_reader :board, :players, :stats, :display, :save, :is_quit
 
@@ -54,10 +58,6 @@ class TicTacToe
 
   def get_next_player
     self.players[1]
-  end
-
-  def return_user_input message, multi_entry, user_options
-    GetUserInput.return_user_input message, multi_entry, user_options
   end
 
   def start
@@ -108,8 +108,6 @@ class TicTacToe
       opt_hash
     end
   end
-
-
 
   def play_turn
     current_player = self.players[0]
