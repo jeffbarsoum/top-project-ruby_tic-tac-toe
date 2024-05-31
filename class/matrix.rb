@@ -1,13 +1,11 @@
 require_relative "board"
 require_relative "square"
+require "error"
 
 class Matrix < Board
+  include Error
 
   attr_reader :matrix
-
-  def error class_name, function_name, error_message
-    super class_name, function_name, error_message
-  end
 
 
   def initialize board_size
