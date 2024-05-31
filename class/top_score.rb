@@ -1,4 +1,4 @@
-require_relative "/module/save"
+require "save"
 
 def class TopScore < Save
   attr_reader :score_data, :key

@@ -1,5 +1,4 @@
-require_relative "../module/save"
-
+require "save"
 class GameSave < Save
 
   attr_reader :data, :key, :current_session
