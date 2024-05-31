@@ -17,7 +17,7 @@ class FiniteStateMachine
     return false unless self.state_files.include? state_file
     require state_file
 
-    cls_name =  self.parse_state_file state_file
+    cls_name =  self.get_class_name state_file
     cls = Object.const_get cls_name
 
     if cls
@@ -33,9 +33,10 @@ class FiniteStateMachine
     self.states[offset].values.first
   end
 
-  def parse_state_file state_file
+
+  def get_class_name state_file
     cls_name = "FiniteStateMachine"
-    func_name = "parse_state_file"
+    func_name = "get_class_name"
     begin
       raise FiniteStateMachineError unless self.state_files.include? state_file
       state_file_processed = state_file.replace ".rb", "" .split "_" .map! { |word| word.capitalize } .join "" .to_sym
