@@ -1,13 +1,9 @@
-require_relative "tic_tac_toe"
+require "error"
 
-class FiniteStateMachine < TicTacToe
+class FiniteStateMachine
+  include Error
 
   attr_reader :state_dir, :state_files, :states, :classes, :instances
-
-
-  def error class_name, function_name, error_message
-    super class_name, function_name, error_message
-  end
 
 
   def initialize states, commands, state_dir = "state"

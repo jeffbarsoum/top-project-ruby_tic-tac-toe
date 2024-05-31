@@ -1,15 +1,10 @@
-require_relative "../class/tic_tac_toe"
+require "error"
 
-module Data < TicTacToe
+module Data
+  include Error
+
+
   attr_reader :squares
-
-  def error class_name, function_name, error_message
-    super class_name, function_name, error_message
-  end
-
-  def parse_coordinates coordinates
-    super coordinates
-  end
 
 
   def initialize

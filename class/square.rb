@@ -1,16 +1,13 @@
-require_relative "matrix"
-require_relative "../module/data"
+require "matrix"
+require "data"
+require "error"
 
 
 class Square < Matrix
   include Data
+  include Error
 
   attr_reader :coordinates, :player, :square
-
-
-  def error class_name, function_name, error_message
-    super class_name, function_name, error_message
-  end
 
 
   def initialize coordinates
@@ -63,7 +60,7 @@ class Square < Matrix
   def assign_player player
     err_prefix = "Square.assign_player ERROR"
     begin
-      raise PlayerAssignError if self.is_assigned 
+      raise PlayerAssignError if self.is_assigned
       @player = player
       @square = Data.square player
     rescue PlayerAssignError
@@ -73,8 +70,6 @@ class Square < Matrix
       puts self.error err_prefix, msg_player_assigned_error
     end
   end
-
-
 
   def assign_win win_type
     err_prefix = "Square.assign_win ERROR"

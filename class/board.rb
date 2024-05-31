@@ -1,22 +1,20 @@
-require_relative "tic_tac_toe"
+require "error"
+require "return_user_input"
 require_relative "matrix"
 
-class Board < TicTacToe
+class Board
   SQUARE_SIZE = [3, 5]
   DEFAULT_BOARD_SIZE = 3
   MAX_BOARD_SIZE = 7
   @@border = { top: "_", side: "|", bottom: "-", corner: "+"}
 
 
+  include GetUserInput
+  include Error
+
+
   attr_reader :board_size, :matrix, :board, :sq_rows, :sq_cols
 
-  def error class_name, function_name, error_message
-    super class_name, function_name, error_message
-  end
-
-  def return_user_input message, multi_entry, user_options
-    super message, multi_entry, user_options
-  end
 
   def parse_coordinates coordinates
     row_coord = coordinates[0]

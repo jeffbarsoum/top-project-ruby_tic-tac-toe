@@ -1,6 +1,6 @@
-require_relative "tic_tac_toe"
+require "error"
 
-class Player < TicTacToe
+class Player
   @@free_players = [:x, :o]
   @@chosen_players = []
   attr_reader :name, :player, :score

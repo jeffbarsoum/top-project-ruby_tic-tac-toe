@@ -1,6 +1,8 @@
-require_relative "tic_tac_toe"
+require "tic_tac_toe"
+require "error"
+require "get_user_input"
 
-class Display < TicTacToe
+class Display
   DISPLAY_CHOICES = {
     title: { choices: [:start, :load, :save, :quit], vertical: true },
     load: { choices: [:back, :quit], vertical: false },
@@ -8,13 +10,15 @@ class Display < TicTacToe
     win: { choices: [:play_again, :save, :quit], vertical: true },
   }
 
+
+  include Error
+  include GetUserInput
+
+
   attr_accessor :active
 
 
-  def return_user_input message, multi_entry, user_options
-    super message, multi_entry, user_options
-  end
-
+  ### Deprecate these functions
   def get_opts_array opts_hash
     super opts_hash
   end
