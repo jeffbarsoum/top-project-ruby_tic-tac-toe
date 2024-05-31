@@ -3,7 +3,7 @@ require "error"
 class FiniteStateMachine
   include Error
 
-  attr_reader :state_dir, :state_files, :states, :classes, :instances
+  attr_reader :state_dir, :state_files, :states, :classes
 
 
   def initialize states, commands, state_dir = "state"
@@ -11,7 +11,6 @@ class FiniteStateMachine
     @state_files = self.get_state_file_list
     @states = []
     @classes = []
-    @instances = []
   end
 
   def load_state state_file, args, state_cmds, screen_cmds
@@ -30,8 +29,8 @@ class FiniteStateMachine
     cls_instance
   end
 
-  def unload_state class_name
-
+  def get_state offset = 0
+    self.states[offset].values.first
   end
 
   def parse_state_file state_file
