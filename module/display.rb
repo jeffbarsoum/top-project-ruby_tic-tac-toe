@@ -2,7 +2,7 @@ require "tic_tac_toe"
 require "error"
 require "get_user_input"
 
-class Display
+module Display
   DISPLAY_CHOICES = {
     title: { choices: [:start, :load, :save, :quit], vertical: true },
     load: { choices: [:back, :quit], vertical: false },
