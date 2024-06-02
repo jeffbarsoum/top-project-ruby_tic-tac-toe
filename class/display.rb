@@ -35,10 +35,11 @@ class Display
     self.board.draw_board
   end
 
-  def screen screen, args_arr, opts_arr, command_arr
-    command_hash = self.user_options command_arr
-    screen_str = self.method(screen)[args_arr]
-    screen_str += self.opts_display command_hash
+  def screen screen: nil, command_hash: [], opts_arr: [], vertical: false
+    return false unless command_arr.length > 0
+
+    self.clear_screen
+    screen_str = screen + self.opts_display command_hash, vertical
     self.return_user_input screen_str, false, opts_arr + command_arr
   end
 
@@ -46,11 +47,15 @@ class Display
     spacing = vertical ? "\n" : " | "
     return_string = "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
     # concatenate all options in a given hash
-    return_string += opts_hash.reduce return_string do |display, (option, input)|
-      display += "#{option.to_s.split('_').map { |word| word.capitalize }.join " "}: #{input}#{spacing}"
+    return_string += cmd_hash.reduce return_string do |display, (input, cmd)|
+      display += "#{cmd.to_s.split('_').map { |word| word.capitalize }.join " "}: #{input}#{spacing}"
       display
     end
     return_string += "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
+  end
+
+  def clear_screen
+    system "clear" || system "cls"
   end
 
   def title choices
