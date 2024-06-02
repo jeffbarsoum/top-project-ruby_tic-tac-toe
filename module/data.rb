@@ -79,7 +79,7 @@ module Data
       self.squares[player][piece_type]
     rescue DataError
       msg_err = "piece must exist in squares hash!"
-      puts self.error cls_name, func_name, msg_err
+      puts self.error msg_err
     end
   end
 
