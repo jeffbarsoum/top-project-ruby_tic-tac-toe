@@ -3,7 +3,12 @@ require "display"
 require "get_user_input"
 require "data"
 
-class State < FiniteStateMachine
+class State
+
+  include GetUserInput
+  include Data
+
+  @@fsm = FiniteStateMachine.new self.cmd_hash
 
   @opts_in = {
     state: :title
@@ -24,9 +29,14 @@ class State < FiniteStateMachine
   attr_reader :opts_in, :opts_out
 
 
-  include GetUserInput
-  include Data
 
+  def initialize opts
+
+    @@fsm
+
+    self.opts = opts
+    self.load_state opts[:state_file], opts[:args], opts[:state_cmds], opts[:screen_cmds]
+  end
 
   def opts_in param = nil
     return self.class.opts_in[param.to_sym] if param
@@ -54,11 +64,6 @@ class State < FiniteStateMachine
     self.send cmd.to_s
   end
 
-  def initialize opts
-
-    self.opts = opts
-    self.load_state opts[:state_file], opts[:args], opts[:state_cmds], opts[:screen_cmds]
-  end
 
   def display args
     msg_screen <<-STRING
