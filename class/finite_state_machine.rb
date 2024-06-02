@@ -13,7 +13,7 @@ class FiniteStateMachine
     @classes = []
   end
 
-  def load_state state_file, args, state_cmds, screen_cmds
+  def load_state state_file:, args:, state_cmds:, screen_cmds:
     return false unless self.state_files.include? state_file
     require state_file
 
