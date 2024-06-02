@@ -3,11 +3,20 @@ require "error"
 module Data
   include Error
 
-
-  attr_reader :squares
+  attr_reader :cmds, :squares
 
 
   def initialize
+    @cmds = {
+      o: :start,
+      q: :quit,
+      s: :save,
+      l: :load,
+      b: :back,
+      r: :reset,
+      a: :play_again
+    }
+
     @squares = {
       x: {
         place: [
@@ -66,8 +75,6 @@ module Data
     }
   end
 
-  # if player is nil, piece should be a string of coordinates
-  # otherwise, it's a symbol representing the placement type
   def square player, piece_type = :place
     cls_name = "Data"
     func_name = "squares"
@@ -84,8 +91,6 @@ module Data
   end
 
   def nil_square coordinates
-    cls_name = "Data"
-    func_name = "nil_square"
     begin
       row_coord = coordinates[1]
       col_coord = coordinates[0]
@@ -102,10 +107,30 @@ module Data
     end
     rescue DataError
       msg_err = "coordinates must be an alphabetic character followed by an integer!"
-      puts self.error cls_name, func_name, msg_err
+      puts self.error msg_err
     end
   end
 
+  def cmd user_input
+    return false unless user_input
+    self.cmds[user_input]
+  end
+
+  def cmd_hash cmd_arr
+    return self.cmds unless cmd_arr
+    cmd_arr.reduce {} do | hash, cmd |
+      hash[self.cmds.key cmd] = cmd
+      hash
+    end
+  end
+
+  def input_arr cmd_arr
+    return self.cmds unless cmd_arr
+    cmd_arr.reduce [] do | arr, cmd |
+      arr.push self.cmds.key cmd
+      arr
+    end
+  end
 
 
 end
