@@ -42,7 +42,7 @@ class Display
     self.return_user_input screen_str, false, opts_arr + command_arr
   end
 
-  def opts_display opts_hash, vertical = false
+  def opts_display cmd_hash, vertical = false
     spacing = vertical ? "\n" : " | "
     return_string = "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
     # concatenate all options in a given hash
