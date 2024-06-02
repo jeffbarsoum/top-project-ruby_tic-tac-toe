@@ -7,6 +7,7 @@ class GameState
 
   include GetUserInput
   include Data
+  include Display
 
   @@fsm = FiniteStateMachine.new self.cmd_hash, "game_state"
 
@@ -24,8 +25,6 @@ class GameState
     vertical: true
   }
 
-  @@display = Display.new
-
   attr_reader :opts_in, :opts_out
 
 
@@ -39,9 +38,8 @@ class GameState
 
 
   def initialize opts
-
-    self.opts = opts
-    self.load_state opts[:state_file], opts[:args], opts[:state_cmds], opts[:screen_cmds]
+    @opts_in = opts
+    user_input = self.screen self.opts_in
   end
 
   def opts_in param = nil
@@ -52,15 +50,6 @@ class GameState
   def opts_out param = nil
     return self.class.opts_out[param.to_sym] if param
     self.class.opts
-  end
-
-  def display_screen
-    @@display.screen self.opts_in
-  end
-
-
-  def get_state offset = 0
-    super offset
   end
 
   def run_cmd cmd
