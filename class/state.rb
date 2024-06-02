@@ -3,12 +3,12 @@ require "display"
 require "get_user_input"
 require "data"
 
-class State
+class GameState
 
   include GetUserInput
   include Data
 
-  @@fsm = FiniteStateMachine.new self.cmd_hash
+  @@fsm = FiniteStateMachine.new self.cmd_hash, "game_state"
 
   @opts_in = {
     state: :title
@@ -29,10 +29,16 @@ class State
   attr_reader :opts_in, :opts_out
 
 
+  def self.load_next_state
+    @@fsm.load_next_state self.opts_out
+  end
+
+  def self.load_state offset = 0
+    @@fsm.load_state offset
+  end
+
 
   def initialize opts
-
-    @@fsm
 
     self.opts = opts
     self.load_state opts[:state_file], opts[:args], opts[:state_cmds], opts[:screen_cmds]
@@ -52,9 +58,6 @@ class State
     @@display.screen self.opts_in
   end
 
-  def load_state
-    super self.opts_out
-  end
 
   def get_state offset = 0
     super offset
