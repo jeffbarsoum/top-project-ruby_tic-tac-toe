@@ -76,8 +76,6 @@ module Data
   end
 
   def square player, piece_type = :place
-    cls_name = "Data"
-    func_name = "squares"
     begin
 
       raise DataError unless self.squares.key? player
