@@ -38,20 +38,19 @@ class GameState
 
 
   def initialize **opts
-    @opts_in = opts
     user_input = self.screen self.opts_in
     cmd = self.cmd user_input
     self.run_cmd cmd
   end
 
   def opts_in param = nil
-    return self.class.opts_in[param.to_sym] if param
-    self.class.opts
+    return self.opts_in[param.to_sym] if param
+    self.opts_in
   end
 
   def opts_out param = nil
-    return self.class.opts_out[param.to_sym] if param
-    self.class.opts
+    return self.opts_out[param.to_sym] if param
+    self.opts_out
   end
 
   def run_cmd cmd
@@ -61,17 +60,7 @@ class GameState
   end
 
   def display args
-    msg_screen <<-STRING
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-                                        Tic Tac Toe!
-    XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-
-    Please press a key to choose your option:
-
-    #{self.opts_display choices}
-
-    STRING
-
-
+    msg_screen = "No screen loaded..."
+  end
 
 end
