@@ -37,9 +37,11 @@ class GameState
   end
 
 
-  def initialize opts
+  def initialize **opts
     @opts_in = opts
     user_input = self.screen self.opts_in
+    cmd = self.cmd user_input
+    self.run_cmd cmd
   end
 
   def opts_in param = nil
@@ -53,9 +55,10 @@ class GameState
   end
 
   def run_cmd cmd
+    return self.send cmd.to_s if self.respond_to? cmd
+    self.define_method cmd.to_s do { self.class.load_next_state }
     self.send cmd.to_s
   end
-
 
   def display args
     msg_screen <<-STRING
