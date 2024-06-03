@@ -43,14 +43,13 @@ class GameState
     self.run_cmd cmd
   end
 
-  def opts_in param = nil
+  def opts param = nil
     return self.opts_in[param.to_sym] if param
     self.opts_in
   end
 
-  def opts_out param = nil
-    return self.opts_out[param.to_sym] if param
-    self.opts_out
+  def opts=param, value
+    @opts_out[param.to_sym] = value
   end
 
   def run_cmd cmd
