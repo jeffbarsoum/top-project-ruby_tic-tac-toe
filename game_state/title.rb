@@ -2,6 +2,18 @@ require "game_state"
 
 class Title < GameState
 
+  attr_reader :opts_in, :opts_out
+
+
+  def opts param = nil
+    super param
+  end
+
+  def opts=param, value
+    super param, value
+  end
+
+
   def initialize **opts
     @@opts_in = {
       state: opts[:state] || "title"
