@@ -9,7 +9,7 @@ class GameState
   include Data
   include Display
 
-  attr_reader :state_name, :state_opts, :cmd
+  attr_reader :state_cmd, :screen_cmd
 
   @@fsm = FiniteStateMachine.new self.cmd_hash, "game_state"
 
@@ -26,8 +26,16 @@ class GameState
   def initialize **opts
     @state_opts = self.generate_opts self.state_name, opts
     user_input = self.screen opts
-    @cmd = self.cmd user_input
-    self.create_cmd
+    user_output = self.cmd user_input
+
+    case user_output
+    when self.state_opts :state_cmds .include user_output
+      @state_cmd = user_output
+      self.create_cmd
+    else
+      @screen_cmd = user_output
+    end
+
     self.cmd
   end
 
@@ -48,9 +56,9 @@ class GameState
     @opts[param.to_sym] = value
   end
 
-  def create_cmd
-    return if self.respond_to? self.cmd
-    self.define_method self.cmd.to_s do { | arg | self.class.load_next_state arg }
+  def create_cmd cmd = self.cmd
+    return if self.respond_to? cmd
+    self.define_method cmd.to_s do { | arg | self.class.load_next_state arg }
   end
 
   def run_cmd opts
