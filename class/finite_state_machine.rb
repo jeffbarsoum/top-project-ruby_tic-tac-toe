@@ -36,8 +36,6 @@ class FiniteStateMachine
 
 
   def get_class_name state_file
-    cls_name = "FiniteStateMachine"
-    func_name = "get_class_name"
     begin
       raise FiniteStateMachineError unless self.state_files.include? state_file
       state_file_processed = state_file.replace ".rb", "" .split "_" .map! { |word| word.capitalize } .join "" .to_sym
@@ -47,7 +45,7 @@ class FiniteStateMachine
       state files must be one of the following:
       #{self.state_files.join ", "}
     STRING
-      self.error cls_name, func_name, msg_fsm_error
+      self.error msg_fsm_error
     end
   end
 
