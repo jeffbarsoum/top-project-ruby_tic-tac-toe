@@ -9,53 +9,60 @@ class GameState
   include Data
   include Display
 
+  attr_reader :cmd
+
   @@fsm = FiniteStateMachine.new self.cmd_hash, "game_state"
 
-  @opts_in = {
+  @opts = {
     state: :title
     cmds: [:start, :load, :save, :quit],
     vertical: true
   }
 
-  @opts_out = {
-    state_file: nil,
-    args: [],
-    state_cmds: [],
-    screen_cmds: [],
-    vertical: true
-  }
 
-  attr_reader :opts_in, :opts_out
-
-
-  def self.load_next_state
-    @@fsm.load_next_state self.opts_out
+  def self.load_next_state opts
+    @@fsm.load_next_state opts
   end
 
   def self.load_state offset = 0
     @@fsm.load_state offset
   end
 
+  def self.opts_out **params
+    opts_hash = {
+      state_file: params[:state_file] || nil,
+      args: params[:args] || [],
+      state_cmds: params[:state_cmds] || [],
+      screen_cmds: params[:screen_cmds] || [],
+      vertical: params[:vertical] || true
+    }
+
+    params.reduce opts_hash do | opts, (param, value) |
+      opts[param] = value unless opts[param]
+      opts
+    end
+  end
+
 
   def initialize **opts
-    user_input = self.screen self.opts_in
-    cmd = self.cmd user_input
-    self.run_cmd cmd
+    @opts = opts
+    user_input = self.screen opts
+    @cmd = self.cmd user_input
   end
 
   def opts param = nil
-    return self.opts_in[param.to_sym] if param
-    self.opts_in
+    return @opts[param.to_sym] if param
+    @opts
   end
 
   def opts=param, value
-    @opts_out[param.to_sym] = value
+    @opts[param.to_sym] = value
   end
 
-  def run_cmd cmd
-    return self.send cmd.to_s if self.respond_to? cmd
-    self.define_method cmd.to_s do { self.class.load_next_state }
-    self.send cmd.to_s
+  def run_cmd opts
+    return self.send self.cmd.to_s if self.respond_to? self.cmd
+    self.define_method self.cmd.to_s do { | arg | self.class.load_next_state arg }
+    self.send self.cmd, opts
   end
 
   def display args
