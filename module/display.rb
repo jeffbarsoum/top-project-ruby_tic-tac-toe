@@ -35,8 +35,8 @@ module Display
     self.board.draw_board
   end
 
-  def screen screen: nil, command_hash: [], opts_arr: [], vertical: false
-    return false unless command_arr.length > 0
+  def screen display: nil, state_cmds: [], screen_cmds: [], vertical: false, input?: true, timeout: 0
+    return false unless state_cmds.length > 0
 
     self.clear_screen
     screen_str = screen + self.opts_display command_hash, vertical
