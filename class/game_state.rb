@@ -49,11 +49,12 @@ class GameState
   end
 
   def create_cmd
-    return self.send self.cmd.to_s if self.respond_to? self.cmd
+    return if self.respond_to? self.cmd
     self.define_method self.cmd.to_s do { | arg | self.class.load_next_state arg }
   end
 
   def run_cmd opts
+    self.create_cmd unless self.respond_to? self.cmd
     self.send self.cmd, opts
   end
 
