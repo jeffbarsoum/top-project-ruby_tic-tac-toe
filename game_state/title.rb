@@ -2,28 +2,27 @@ require "game_state"
 
 class Title < GameState
 
-  attr_reader :opts_in, :opts_out
+  attr_reader :cmd
 
 
-  def opts param = nil
+  def state_opts param = nil
     super param
   end
 
-  def opts=param, value
+  def state_opts=param, value
     super param, value
+  end
+
+  def run_cmd opts
+    super opts
   end
 
 
   def initialize **opts
-    @@opts_in = {
-      state: opts[:state] || "title"
-      cmds: opts[:cmds] || [:start, :load, :save, :quit],
-      vertical: opts[:vertical] || true,
-      screen: self.display
-    }
+    super opts
   end
 
-  def display _args = []
+  def display _args = {}
     msg_screen <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
                                         Tic Tac Toe!
