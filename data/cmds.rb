@@ -17,6 +17,10 @@ module DataCmds
     self.cmds[user_input]
   end
 
+  def cmd_arr cmd_hash
+    state_hash.reduce [] { |cmd_hash, (input, cmd)| cmd_hash.push cmd; cmd_hash }
+  end
+
   def cmd_hash cmd_arr
     return self.cmds unless cmd_arr
     cmd_arr.reduce {} do | hash, cmd |
@@ -32,5 +36,6 @@ module DataCmds
       arr
     end
   end
+
 
 end
