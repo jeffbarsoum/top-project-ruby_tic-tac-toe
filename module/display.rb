@@ -1,6 +1,7 @@
 require "tic_tac_toe"
 require "error"
 require "get_user_input"
+require "cmds"
 
 module Display
   DISPLAY_CHOICES = {
@@ -13,6 +14,7 @@ module Display
 
   include Error
   include GetUserInput
+  include DataCmds
 
 
   attr_accessor :active
