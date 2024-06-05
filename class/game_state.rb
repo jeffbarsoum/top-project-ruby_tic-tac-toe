@@ -13,6 +13,7 @@ class GameState
   attr_reader :state_cmd, :screen_cmd
 
   @@fsm = FiniteStateMachine.new self.cmd_hash, "game_state"
+  @@data = Data.new dir: "data", class_prefix: "Data"
 
 
   def self.load_next_state opts
@@ -25,9 +26,9 @@ class GameState
 
 
   def initialize **opts
-    @state_opts = self.generate_opts self.state_name, opts
+    @state_opts = self.data.generate_opts self.state_name, opts
     user_input = self.screen opts
-    user_output = self.cmd user_input
+    user_output = self.data.cmd user_input
 
     case user_output
     when self.state_opts :state_cmds .include user_output
@@ -46,6 +47,14 @@ class GameState
       name += "_#{letter.downcase}" if letter == letter.upcase
       name
     end
+  end
+
+  def fsm
+    @@fsm
+  end
+
+  def data
+    @@data
   end
 
   def state_opts param = nil
