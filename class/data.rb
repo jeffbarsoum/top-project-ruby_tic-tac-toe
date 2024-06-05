@@ -4,7 +4,7 @@ class Data
     self.import
   end
 
-  def import dir = "data", class_prefix = "Data"
+  def import dir: "data", class_prefix: "Data"
     data_dir = "../#{dir}"
     assets = Dir data_dir
     assets.each do |asset|
