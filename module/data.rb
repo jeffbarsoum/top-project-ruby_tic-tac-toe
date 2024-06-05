@@ -1,23 +1,18 @@
-require "error"
-
 class Data
-  include Error
 
-  attr_reader :assets
+  def initialize
+    self.import
+  end
 
   def import dir = "data", class_prefix = "Data"
     data_dir = "../#{dir}"
     assets = Dir data_dir
     assets.each do |asset|
-      cls_name = self.get_class_name asset, class_prefix
-      cls = Object.const_get cls_name
-      instance = cls.new
-      inst_assets = instance.instance_methods false
-      inst_assets.each do |inst_asset|
-        # create instance variables and getter functions
-      end
-      @assets.push instance
+      mod_name = self.get_class_name asset, class_prefix
+      mod = Object.const_get cls_name
+      include mod
     end
+  end
 
   def get_class_name state_file, class_prefix = ""
       state_file_processed = state_file.replace ".rb", ""
