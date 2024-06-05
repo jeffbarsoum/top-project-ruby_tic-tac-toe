@@ -8,6 +8,7 @@ class GameState
   include GetUserInput
   include Data
   include Display
+  include Variablize
 
   attr_reader :state_cmd, :screen_cmd
 
