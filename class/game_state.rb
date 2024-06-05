@@ -58,12 +58,12 @@ class GameState
   end
 
   def state_opts param = nil
-    return @opts[param.to_sym] if param
+    return @state_opts[param.to_sym] if param
     @opts
   end
 
   def state_opts=param, value
-    @opts[param.to_sym] = value
+    @state_opts[param.to_sym] = value
   end
 
   def create_cmd cmd = self.state_cmd
