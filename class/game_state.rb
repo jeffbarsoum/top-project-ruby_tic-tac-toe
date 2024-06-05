@@ -66,14 +66,14 @@ class GameState
     @opts[param.to_sym] = value
   end
 
-  def create_cmd cmd = self.cmd
+  def create_cmd cmd = self.state_cmd
     return if self.respond_to? cmd
     self.define_method cmd.to_s do { | arg | self.class.load_next_state arg }
   end
 
-  def run_cmd opts
-    self.create_cmd unless self.respond_to? self.cmd
-    self.send self.cmd, opts
+  def run_cmd cmd, opts
+    self.create_cmd unless self.respond_to? cmd
+    self.send cmd, opts
   end
 
   def display args
