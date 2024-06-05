@@ -6,7 +6,6 @@ require "data"
 class GameState
 
   include GetUserInput
-  include Data
   include Display
   include Variablize
 
