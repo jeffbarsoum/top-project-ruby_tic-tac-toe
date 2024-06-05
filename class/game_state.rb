@@ -38,7 +38,6 @@ class GameState
       @screen_cmd = user_output
     end
 
-    self.cmd
   end
 
   def state_name
