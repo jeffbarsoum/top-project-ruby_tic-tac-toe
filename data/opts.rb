@@ -2,10 +2,27 @@ module DataOpts
 
   def opts
   {
-    title: { state_file:"title", state_cmds: [:start, :load, :save, :quit], vertical: true },
-    load: { state_file:"load", state_cmds: [:back, :quit], vertical: false },
-    game: { state_file:"game", state_cmds: [:save, :quit], vertical: true },
-    win: { state_file:"win", state_cmds: [:play_again, :save, :quit], vertical: true },
+    title: {
+      state_file:"title",
+      state_cmds: [:start, :load, :save, :quit],
+      screen_cmds: [],
+      vertical: true
+    },
+    load: {
+      state_file:"load",
+      state_cmds: [:back, :quit],
+      vertical: false
+    },
+    game: {
+      state_file:"game",
+      state_cmds: [:save, :quit],
+      vertical: true
+    },
+    win: {
+      state_file:"win",
+      state_cmds: [:play_again, :save, :quit],
+      vertical: true
+    },
   }
   end
 
