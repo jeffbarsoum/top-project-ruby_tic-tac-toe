@@ -1,34 +1,38 @@
-require "get_user_input"
-require "error"
-require "board"
+require "finite_state_machine"
+require "matrix"
 require "player"
 require "stats"
-require "display"
 require "game_save"
 
+require "title"
+require "message"
+require "input"
+
+require "cmds"
+require "opts"
+require "board"
+
 class TicTacToe
-  SQUARE_CHOICES = [:x, :o, :nil]
-  USER_OPTIONS = {
-    start: "o",
-    quit: "q",
-    save: "s",
-    load: "l",
-    back: "b",
-    reset: "r"
-  }
+
+  include DataCmds
+  include DataOpts
+  include DataBoard
 
 
-  include GetUserInput
-  include Error
-
-
-  attr_reader :board, :players, :stats, :display, :save, :is_quit
+  attr_reader :fsm, :game_opts, :matrix, :players, :stats, :game_save
 
 
   def initialize save_data = false
-    @is_quit = false
-    @display = Display.new
+    @fsm = FiniteStateMachine.new
+    @game_opts = {}
+    @stats = Stats.new
     @save = GameSave.new
+    @players =  []
+
+    self.load_players
+    self.load_board_size
+
+    @matrix = Matrix.new self.game_opts[:board_size]
 
     opts_hash = self.user_options :start, :load, :quit
     opts = self.get_opts_arrayj opts_hash
@@ -39,6 +43,34 @@ class TicTacToe
     # Launch appropriate screen
     self.process_user_option title_choice
 
+  end
+
+  def load_players
+    opts_message = self.generate_opts "message", opts
+
+    until Player.get_free_players.empty? do
+      args[:msg] = "What would you like us to call you this round?"
+      input_state = self.fsm.load_next_state "input", args, opts
+      player = Player.new input_state.user_input
+      @players.push player
+      args[:msg] = "Hello, #{player.name}, you will be '#{player}''s"
+      message_state = self.fsm.load_next_state "message", args, opts
+    end
+  end
+
+  def load_board_size
+    opts_input = self.data.generate_opts "input", opts
+
+    args[:msg] <<-STRING
+    How big do you want the Tic Tac Toe Board to be?
+
+      The default is 3, so 3 rows and 3 columns, and 3
+      in a row wins
+
+      You can go as high as 7:
+    STRING
+    input_state = fsm.load_next_state "input", args, opts
+    @game_opts[:board_size] = input_state.user_input
   end
 
   def process_user_option input
