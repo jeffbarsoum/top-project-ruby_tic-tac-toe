@@ -21,4 +21,8 @@ module DataBoard
     }
   end
 
+  def square_choices
+    [:x, :o, :nil]
+  end
+
 end
