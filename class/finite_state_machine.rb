@@ -6,7 +6,7 @@ class FiniteStateMachine
   attr_reader :state_dir, :state_files, :states, :classes
 
 
-  def initialize cmds, state_dir = "state"
+  def initialize state_dir = "state"
     @state_dir = state_dir
     @state_files = self.get_state_file_list
     @states = []
