@@ -73,6 +73,27 @@ class TicTacToe
     @game_opts[:board_size] = input_state.user_input
   end
 
+  def play_game opts = self.generate_opts "title"
+    is_quit = false
+    next_opts = opts
+    until is_quit do
+      is_quit = state.state_cmd == :quit
+
+      case state.state_cmd
+      when :back
+        state = self.fsm.load_state 1
+      when nil
+        state = self.fsm.load_next_state next_opts
+      else
+        # do something if screen cmd
+      end
+
+      next_opts = state.run_cmd
+    end
+  end
+
+
+
   def process_user_option input
     return unless USER_OPTIONS.has_val? input
     command = USER_OPTIONS.key input
