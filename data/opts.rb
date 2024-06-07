@@ -2,27 +2,64 @@ module DataOpts
 
   def opts
   {
-    title: {
-      state_file:"title",
-      state_cmds: [:start, :load, :save, :quit],
-      screen_cmds: [],
+    input: {
+      state_file:"input",
+      state_cmds: [],
+      args: {
+        msg: "Placeholder",
+        user_opt: :text,
       vertical: true
+      }
     },
     load: {
       state_file:"load",
       state_cmds: [:back, :quit],
+      args: {
+        user_opt: [],
+        save: nil,
       vertical: false
+      }
     },
-    game: {
-      state_file:"game",
+    message: {
+      state_file:"message",
+      state_cmds: [],
+      args: {
+        msg: "Placeholder",
+        user_opt: [""]
+      }
+    },
+    play: {
+      state_file:"play",
       state_cmds: [:save, :quit],
+      args: {
+        user_opt: [],
+        players: nil,
+        stats: nil,
+        matrix: nil
+      }
+    },
+    save: {
+      state_file:"save",
+      state_cmds: [],
+      screen_cmds: [],
+      vertical: false,
+      args: {
+        user_opt: ["y","n"],
+        save: nil
+      }
+    },
+    title: {
+      state_file:"title",
+      state_cmds: [:start, :load, :save, :quit],
+      args: {
       vertical: true
+      }
     },
     win: {
       state_file:"win",
       state_cmds: [:play_again, :save, :quit],
       vertical: true
-    },
+    }
   }
   end
 
