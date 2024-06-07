@@ -1,6 +1,6 @@
 require "game_state"
 
-class Title < GameState
+class Message < GameState
 
   attr_reader :cmd
 
