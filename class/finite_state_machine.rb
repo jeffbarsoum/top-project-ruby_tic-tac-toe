@@ -1,7 +1,9 @@
 require "error"
+require "variablize"
 
 class FiniteStateMachine
   include Error
+  include Variablize
 
   attr_reader :state_dir, :state_files, :states, :classes
 
@@ -17,7 +19,7 @@ class FiniteStateMachine
     return false unless self.state_files.include? state_file
     require state_file
 
-    cls_name =  self.get_class_name state_file
+    cls_name =  self.class_name state_file
     cls = Object.const_get cls_name
 
     if cls
@@ -29,22 +31,16 @@ class FiniteStateMachine
     cls_instance
   end
 
-  def load_state offset = 0
-    self.states[offset].values.first
-  end
-
-
-  def get_class_name state_file
-    begin
-      raise FiniteStateMachineError unless self.state_files.include? state_file
-      state_file_processed = state_file.replace ".rb", "" .split "_" .map! { |word| word.capitalize } .join "" .to_sym
-    rescue FiniteStateMachineError
-      msg_fsm_error <<-STRING
-      #{state_file} not found in #{self.state_dir} directory!
-      state files must be one of the following:
-      #{self.state_files.join ", "}
-    STRING
-      self.error msg_fsm_error
+  def load_state offset = 0, skip_msg = true, skip_input = false
+    until is_load do
+      back_state = self.states[offset]
+      is_msg = back_state.class == "Message"
+      is_input = back_state.class == "Input"
+      is_oth_state = !is_msg && !is_input
+      is_load = (is_msg && !skip_msg) || (is_input && !skip_input) || is_oth_state
+      return back_state if is_load
+      offset += 1
+      return false if offset > self.states.length - 1
     end
   end
 
