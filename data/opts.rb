@@ -8,7 +8,7 @@ module DataOpts
       args: {
         msg: "Placeholder",
         user_opt: :text,
-      vertical: true
+        vertical: true
       }
     },
     load: {
@@ -17,7 +17,7 @@ module DataOpts
       args: {
         user_opt: [],
         save: nil,
-      vertical: false
+        vertical: false
       }
     },
     message: {
@@ -52,7 +52,7 @@ module DataOpts
       state_file:"title",
       state_cmds: [:start, :load, :save, :quit],
       args: {
-      vertical: true
+        vertical: true
       }
     },
     win: {
@@ -77,5 +77,17 @@ module DataOpts
       opts
     end
   end
+
+  def generate_args opts, **args
+    opts_default = self.generate_opts opts[:state_file]
+    args_default = opts_default[:args]
+    args_return = {}
+    args_default.each do |arg, val|
+      return {missing_arg: arg} unless args[arg]
+      args_return[arg] = args[arg] || val
+    end
+    args_return
+  end
+
 
 end
