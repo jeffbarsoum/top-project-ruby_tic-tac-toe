@@ -16,29 +16,34 @@ module DataCmds
     {
       start: {
         user_input: "o",
-        proc: Proc.new do |fsm, players, **opts|
-          opts = self.generate_opts "input", opts
-          until Player.get_free_players.empty? do
-            args[:msg] = "What would you like us to call you this round?"
-            input_state = fsm.load_next_state "input", args, opts[:state_cmds], opts[:screen_cmds]
-            player = Player.new input_state.user_input
-            args[:msg] = "Hello, #{player.name}, you will be '#{player}''s"
-            message_state = fsm.load_next_state "message", args, opts[:state_cmds], opts[:screen_cmds]
-          end
-          args[:msg] <<-STRING
-          How big do you want the Tic Tac Toe Board to be?
-
-            The default is 3, so 3 rows and 3 columns, and 3
-            in a row wins
-
-            You can go as high as 7:
-          STRING
-          input_state = fsm.load_next_state "input", args, opts[:state_cmds], opts[:screen_cmds]
-        end,
+        next_state: "title",
+        proc_opts: Proc.new { self.generate_opts "title" },
+        proc_load: Proc.new { self.fsm.load_next_state "title", args, opts }
       },
-      q: :quit,
-      s: :save,
-      l: :load,
+      quit: {
+        user_input: "q",
+        next_state: "quit",
+        proc_opts: Proc.new { self.generate_opts "quit" },
+        proc_load: Proc.new { self.fsm.load_next_state "quit", args, opts }
+      },
+      save: {
+        user_input: "s",
+        next_state: "save",
+        proc_opts: Proc.new { self.generate_opts "save" },
+        proc_load: Proc.new { self.fsm.load_next_state "save", args, opts }
+      },
+      load: {
+        user_input: "l",
+        next_state: "load",
+        proc_opts: Proc.new { self.generate_opts "load" },
+        proc_load: Proc.new { self.fsm.load_next_state "load", args, opts }
+      },
+      back: {
+        user_input: "l",
+        next_state: "load",
+        proc_opts: Proc.new { self.generate_opts "load" },
+        proc_load: Proc.new { self.fsm.load_state "load", args, opts }
+      },
       b: :back,
       r: :reset,
       a: :play_again
