@@ -66,12 +66,13 @@ class GameState
 
   def create_cmd cmd = self.state_cmd
     return if self.respond_to? cmd
-    self.define_method cmd.to_s do { | arg | self.class.load_next_state arg }
+    self.define_method cmd.to_s do { | arg | self.data.generate_opts self.state_name, opts}
   end
 
-  def run_cmd cmd, opts
+  def run_cmd cmd = self.state_cmd
+    return false unless cmd
     self.create_cmd unless self.respond_to? cmd
-    self.send cmd, opts
+    self.send cmd
   end
 
   def display args
