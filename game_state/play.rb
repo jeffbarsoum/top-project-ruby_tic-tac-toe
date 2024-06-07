@@ -19,10 +19,21 @@ class Play < GameState
 
 
   def initialize **opts
+    @state_ops = {
+      state_name: "title",
+      user_opt: [],
+      players: nil,
+      stats: nil,
+      matrix: nil
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
+    }
     super opts
   end
 
-  def display players: self.opts :players, stats: self.opts :stats, **args
+  def display **args
     p1 = players[0]
     p2 = players[1]
     p1_score = stats[:score][p1.player.to_sym]
