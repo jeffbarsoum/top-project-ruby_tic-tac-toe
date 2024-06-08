@@ -4,8 +4,9 @@ require "error"
 
 class Matrix < Board
   include Error
+  include DataBoard
 
-  attr_reader :matrix
+  attr_reader :matrix, :coordinates
 
 
   def initialize board_size
@@ -13,8 +14,6 @@ class Matrix < Board
   end
 
   def populate_matrix board_size
-    cls_name = "Matrix"
-    func_name = "populate_matrix"
     begin
       raise MatrixError unless self.matrix.empty?
       board_size.times do |row|
@@ -23,16 +22,15 @@ class Matrix < Board
         board_size.times do |col|
           col_id = 'a'..'z'[col]
           coord = col_id + row_id.to_s
+          @coordinates.push coord
           new_square = Square.new self.parse_coordinates coord
-
           row_array.push new_square
-          @matrix.push row_array
         end
+        @matrix.push row_array
       end
     rescue MatrixError
       msg_bad_player_error = "game matrix already has pieces in it!"
-      puts self.error cls_name, func_name, msg_bad_player_error
-
+      self.error msg_bad_player_error
     end
   end
 
@@ -63,7 +61,9 @@ class Matrix < Board
   end
 
   def assign_piece player, coordinates
+    return false unless self.coordinates.include? coordinates
     self.get_piece coordinates .assign_player player
+    @coordinates.delete coordinates
   end
 
   def check_winner
