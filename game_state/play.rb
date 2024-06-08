@@ -34,7 +34,7 @@ class Play < GameState
       state_name: "title",
       screen: self.display opts[:players], opts[:stats], opts[:matrix]
       players: opts[:players],
-      stats: opts[:stats],,
+      stats: opts[:stats],
       matrix: opts[:matrix],
     }
     super opts
