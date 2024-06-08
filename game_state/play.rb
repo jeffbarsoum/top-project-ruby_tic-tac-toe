@@ -19,21 +19,28 @@ class Play < GameState
 
 
   def initialize **opts
-    @state_ops = {
-      state_name: "title",
-      user_opt: [],
-      players: nil,
-      stats: nil,
-      matrix: nil
-      proc: {
-        proc_opts: Proc.new { self.generate_opts "play" },
-        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+    @state_cmds = [
+      s: {
+        state: "save",
+        text: "Save"
+      },
+      q: {
+        state: "quit",
+        text: "Quit"
       }
+    ]
+    @screen_cmds = opts[:matrix].coordinates
+    @state_opts = {
+      state_name: "title",
+      screen: self.display opts[:players], opts[:stats], opts[:matrix]
+      players: opts[:players],
+      stats: opts[:stats],,
+      matrix: opts[:matrix],
     }
     super opts
   end
 
-  def display **args
+  def display players:, stats:, matrix:
     p1 = players[0]
     p2 = players[1]
     p1_score = stats[:score][p1.player.to_sym]
