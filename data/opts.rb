@@ -3,37 +3,72 @@ module DataOpts
   def opts
   {
     input: {
-      msg: "Placeholder",
-      user_opt: :text,
-      vertical: true
+      opt: {
+        msg: "Placeholder",
+        user_opt: :text,
+        vertical: true
+      },
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
     },
+
     load: {
-      user_opt: [],
-      save: nil,
-      vertical: false
+      opt: {
+        user_opt: [],
+        save: nil,
+        vertical: false
+      },
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
     },
+
     message: {
+      user_opt: [""],
       msg: "Placeholder",
-      user_opt: [""]
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
+
     },
     play: {
       user_opt: [],
       players: nil,
       stats: nil,
       matrix: nil
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
     },
     save: {
-        user_opt: ["y","n"],
-        save: nil
-        vertical: false,
-      },
+      user_opt: ["y","n"],
+      save: nil
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
+      vertical: false,
+    },
     title: {
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
       vertical: true
     },
     win: {
       state_file:"win",
       state_cmds: [:play_again, :save, :quit],
       vertical: true
+      proc: {
+        proc_opts: Proc.new { self.generate_opts "play" },
+        proc_load: Proc.new { self.fsm.load_next_state "play", args, opts }
+      }
     }
   }
   end
