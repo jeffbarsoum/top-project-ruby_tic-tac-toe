@@ -15,21 +15,17 @@ class GameState
 
   def initialize **opts
     user_input = self.screen opts
-    user_output = self.data.cmd user_input
-
-    case user_output
-    when self.state_opts :state_cmds .include user_output
-      @state_cmd = user_output
-      self.create_cmd
-    else
-      @screen_cmd = user_output
-    end
-
+    user_output = self.process_user_input user_input
+    @next_state = user_output
   end
 
 
   def data
     @@data
+  end
+
+  def process_user_input user_input
+    self.state_cmds[user_input.to_sym][:state]
   end
 
   def state_opts param = nil
@@ -41,9 +37,11 @@ class GameState
     @state_opts[param.to_sym] = value
   end
 
-  def create_cmd cmd = self.state_cmd
+  def create_cmd cmd = self.next_state
     return if self.respond_to? cmd
-    self.define_method cmd.to_s do { | arg | self.data.generate_opts self.state_name, opts}
+    self.define_method cmd.to_s do | arg |
+      self.next_state
+    end
   end
 
   def run_cmd cmd = self.state_cmd
