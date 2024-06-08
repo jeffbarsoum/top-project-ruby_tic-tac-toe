@@ -45,7 +45,9 @@ class FiniteStateMachine
   end
 
   def get_state_file_list
-    Dir "../#{self.state_dir}/"
+    Dir "../#{self.state_dir}/" .map do |state_file|
+      state_file.basename
+    end
   end
 
 end
