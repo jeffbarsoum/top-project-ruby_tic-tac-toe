@@ -53,11 +53,19 @@ module Display
     end
   end
 
-  def opts_display cmd_hash, vertical = false
+  def display_hash state_cmds
+    state_cmds.reduce {} do |out_hash, (user_input, cmd_hash)|
+      out_hash[user_input.to_sym] = cmd_hash[:text]
+      out_hash
+    end
+  end
+
+  def opts_display state_cmds, vertical = false
+    display_hash = self.display_hash state_cmds
     spacing = vertical ? "\n" : " | "
     return_string = "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
     # concatenate all options in a given hash
-    return_string += cmd_hash.reduce return_string do |display, (input, cmd)|
+    return_string += display_hash.reduce return_string do |display, (input, cmd)|
       display += "#{cmd.to_s.split('_').map { |word| word.capitalize }.join " "}: #{input}#{spacing}"
       display
     end
