@@ -13,8 +13,13 @@ class GameState
 
   @@data = Data.new dir: "data", class_prefix: "Data"
 
-  def initialize **opts
-    user_input = self.screen opts
+  def initialize
+    self.state_opts = "state_name", self.script_name self.class.name
+    self.get_next_state
+  end
+
+  def get_next_state
+    user_input = self.screen self.state_opts
     user_output = self.process_user_input user_input
     @next_state = user_output
   end
@@ -34,6 +39,7 @@ class GameState
   end
 
   def state_opts=param, value
+    @state_opts = {} unless self.state_opts
     @state_opts[param.to_sym] = value
   end
 
@@ -50,7 +56,7 @@ class GameState
     self.send cmd
   end
 
-  def display args
+  def display _args
     msg_screen = "No screen loaded..."
   end
 
