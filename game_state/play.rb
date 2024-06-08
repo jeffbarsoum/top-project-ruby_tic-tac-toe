@@ -18,8 +18,8 @@ class Play < GameState
   end
 
 
-  def initialize **opts
-    @state_cmds = [
+  def initialize matrix:, players:, stats:
+    self.state_opts = "state_cmds", [
       s: {
         state: "save",
         text: "Save"
@@ -29,18 +29,21 @@ class Play < GameState
         text: "Quit"
       }
     ]
-    @screen_cmds = opts[:matrix].coordinates
-    @state_opts = {
-      state_name: "title",
-      screen: self.display opts[:players], opts[:stats], opts[:matrix]
-      players: opts[:players],
-      stats: opts[:stats],
-      matrix: opts[:matrix],
-    }
-    super opts
+    self.state_opts = "vertical", true
+    self.state_opts = "input?", true
+    self.state_opts = "any_text?", false
+
+    self.state_opts = "screen_cmds", matrix.coordinates
+    self.state_opts = "screen", self.display matrix, players, stats
+
+    self.state_opts = "matrix", matrix
+    self.state_opts = "players", players
+    self.state_opts = "stats", stats
+
+    super
   end
 
-  def display players:, stats:, matrix:
+  def display matrix:, players:, stats:
     p1 = players[0]
     p2 = players[1]
     p1_score = stats[:score][p1.player.to_sym]
