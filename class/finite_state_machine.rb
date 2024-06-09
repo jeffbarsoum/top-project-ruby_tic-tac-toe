@@ -15,7 +15,7 @@ class FiniteStateMachine
     @classes = []
   end
 
-  def load_next_state state_file:, args:, state_cmds:, screen_cmds:
+  def load_state state_file:, **opts
     return false unless self.state_files.include? state_file
     require state_file
 
@@ -31,8 +31,8 @@ class FiniteStateMachine
     cls_instance
   end
 
-  def load_state offset = 0, skip_msg = true, skip_input = false
-    until is_load do
+  def get_state offset = 0, cls_skip = []
+    until offset > self.states.length - 1 do
       back_state = self.states[offset]
       is_msg = back_state.class == "Message"
       is_input = back_state.class == "Input"
