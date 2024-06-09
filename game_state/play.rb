@@ -19,7 +19,7 @@ class Play < GameState
 
 
   def initialize matrix:, players:, stats:
-    self.state_opts = "state_cmds", [
+    self.state_opts = "state_cmds", {
       s: {
         state: "save",
         text: "Save"
@@ -28,7 +28,7 @@ class Play < GameState
         state: "quit",
         text: "Quit"
       }
-    ]
+    }
     self.state_opts = "vertical", true
     self.state_opts = "input?", true
     self.state_opts = "any_text?", false
