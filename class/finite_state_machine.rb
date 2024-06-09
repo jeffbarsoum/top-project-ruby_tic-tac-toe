@@ -24,7 +24,7 @@ class FiniteStateMachine
 
     if cls
       self.classes.unshift { cls_name => cls }
-      cls_instance = cls.new args, state_cmds, screen_cmds
+      cls_instance = cls.new opts
       self.instances.unshift { cls_name => cls_instance }
     end
 
