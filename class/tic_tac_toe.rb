@@ -86,20 +86,30 @@ class TicTacToe
   end
 
   def play
-    win_array = false
     coordinates = self.matrix.coordinates
-    until win_array || coordinates.empty? do
+    until self.stats.winner || coordinates.empty? do
+      self.stats.add_turn self.get_current_player
       opts = {
         matrix: self.matrix,
         players: self.players,
         stats: self.stats
       }
       next_state = self.fsm.load_state state_file: __method__.to_s, opts
+      cmds = next_state.state_opts "state_cmds"
       cmd = next_state.get_next_state
-      next_state.state_opts "state_cmds"[cmd.to_sym]
+      return cmd if cmds.keys.include? cmd
+      self.stats.add_winner "winner", self.matrix.assign_piece self.get_current_player, cmd
+      self.change_player_turn
     end
-
-    return
+    self.stats.add_stat "round"
+    if self.stats.winner
+      winner = self.stats.winner[:player]
+      self.stats.add_score winner
+      return "win"
+    else
+      self.stats.add_score "draw"
+      return "draw"
+    end
   end
 
   def save
