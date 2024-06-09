@@ -9,7 +9,7 @@ class GameState
   include Display
   include Variablize
 
-  attr_reader :state_cmds, :state_opts
+  attr_reader :state_cmds, :state_opts, :next_state
 
   @@data = Data.new dir: "data", class_prefix: "Data"
 
