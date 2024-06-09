@@ -64,6 +64,8 @@ class Matrix < Board
     return false unless self.coordinates.include? coordinates
     self.get_piece coordinates .assign_player player
     @coordinates.delete coordinates
+
+    self.assign_winner
   end
 
   def check_winner
