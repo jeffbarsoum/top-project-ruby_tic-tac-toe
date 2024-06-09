@@ -92,6 +92,47 @@ class TicTacToe
     end
   end
 
+  def back
+    self.fsm.get_state 1, ["Message", "Input"]
+  end
+
+  def input
+    self.fsm.load_state state_file: __method__.to_s
+  end
+
+  def load
+    self.fsm.load_state state_file: __method__.to_s
+  end
+
+  def message
+    self.fsm.load_state state_file: __method__.to_s
+  end
+
+  def play
+    opts = {
+      matrix: self.matrix,
+      players: self.players,
+      stats: self.stats
+    }
+    self.fsm.load_state state_file: __method__.to_s, opts
+  end
+
+  def save
+    self.fsm.load_state state_file: __method__.to_s
+  end
+
+  def title
+    self.fsm.load_state state_file: __method__.to_s
+  end
+
+  def quit
+    self.fsm.load_state state_file: __method__.to_s
+  end
+
+  def win
+    self.fsm.load_state state_file: __method__.to_s
+  end
+
 
 
   def process_user_option input
