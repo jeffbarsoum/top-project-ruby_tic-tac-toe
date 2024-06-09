@@ -5,7 +5,7 @@ class Stats
 
   def initialize
     @stats = {}
-    @stats[:score] = {x: 0, o: 0}
+    @stats[:score] = {x: 0, o: 0, draw: 0}
     @stats[:turn] = {x: 0, o: 0}
     @stats[:round] = 0
     @stats[:winner] = false
