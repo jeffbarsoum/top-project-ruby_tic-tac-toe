@@ -139,6 +139,10 @@ class TicTacToe
     self.players[1]
   end
 
+  def change_player_turn
+    self.players.push self.players.shift
+  end
+
   def start
     @players = []
     until Player.get_free_players.empty? do
