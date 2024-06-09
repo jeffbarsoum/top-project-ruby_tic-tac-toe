@@ -119,19 +119,16 @@ class Matrix < Board
   def check_diagonal
     left_diagonal_array = []
     right_diagonal_array = []
-    self.matrix.each_with_index do |row, i|
 
+    self.matrix.each_with_index do |row, i|
       left_diagonal_array.push self.matrix[row][row]
       right_diagonal_array.push self.matrix[row][self.matrix.length - 1 - row]
-
     end
 
     is_left_match =  left_diagonal_array.uniq.count == 1
     return { squares: left_diagonal_array, player: left_diagonal_array[0].player, win_type: :left_diagonal } if is_left_match
 
-
     is_right_match =  right_diagonal_array.uniq.count == 1
-    return [right_diagonal_array, :right_diagonal] if is_right_match
     return { squares: right_diagonal_array, player: right_diagonal_array[0].player, win_type: :right_diagonal } if is_right_match
 
     return false
