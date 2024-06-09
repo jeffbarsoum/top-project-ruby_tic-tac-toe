@@ -23,7 +23,7 @@ class TicTacToe
 
 
   def initialize save_data = false
-    @fsm = FiniteStateMachine.new
+    @fsm = FiniteStateMachine.new "game_state"
     @game_opts = {}
     @stats = Stats.new
     @save = GameSave.new
