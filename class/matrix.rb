@@ -89,6 +89,8 @@ class Matrix < Board
     win_type = win_array[1]
 
     win_pieces.each |piece| do { piece.assign_win win_type }
+
+    win_array
   end
 
 
