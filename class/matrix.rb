@@ -68,6 +68,9 @@ class Matrix < Board
     self.assign_winner
   end
 
+
+  private
+
   def check_winner
     is_column_win = self.check_column
     return is_column_win if is_column_win
@@ -92,9 +95,6 @@ class Matrix < Board
 
     win_array
   end
-
-
-  private
 
   def check_row
     self.matrix.each_with_index do |row, i|
