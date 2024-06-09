@@ -34,13 +34,9 @@ class FiniteStateMachine
   def get_state offset = 0, cls_skip = []
     until offset > self.states.length - 1 do
       back_state = self.states[offset]
-      is_msg = back_state.class == "Message"
-      is_input = back_state.class == "Input"
-      is_oth_state = !is_msg && !is_input
-      is_load = (is_msg && !skip_msg) || (is_input && !skip_input) || is_oth_state
-      return back_state if is_load
+      is_skip = cls_skip.include? back_state.class.name
+      return back_state unless is_skip
       offset += 1
-      return false if offset > self.states.length - 1
     end
   end
 
