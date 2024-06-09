@@ -43,19 +43,6 @@ class GameState
     @state_opts[param.to_sym] = value
   end
 
-  def create_cmd cmd = self.next_state
-    return if self.respond_to? cmd
-    self.define_method cmd.to_s do | arg |
-      self.next_state
-    end
-  end
-
-  def run_cmd cmd = self.state_cmd
-    return false unless cmd
-    self.create_cmd unless self.respond_to? cmd
-    self.send cmd
-  end
-
   def display _args
     msg_screen = "No screen loaded..."
   end
