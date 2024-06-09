@@ -86,12 +86,20 @@ class TicTacToe
   end
 
   def play
-    opts = {
-      matrix: self.matrix,
-      players: self.players,
-      stats: self.stats
-    }
-    self.fsm.load_state state_file: __method__.to_s, opts
+    win_array = false
+    coordinates = self.matrix.coordinates
+    until win_array || coordinates.empty? do
+      opts = {
+        matrix: self.matrix,
+        players: self.players,
+        stats: self.stats
+      }
+      next_state = self.fsm.load_state state_file: __method__.to_s, opts
+      cmd = next_state.get_next_state
+      next_state.state_opts "state_cmds"[cmd.to_sym]
+    end
+
+    return
   end
 
   def save
