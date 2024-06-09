@@ -59,9 +59,7 @@ class TicTacToe
   end
 
   def load_board_size
-    opts_input = self.data.generate_opts "input", opts
-
-    args[:msg] <<-STRING
+    opts[:msg] <<-STRING
     How big do you want the Tic Tac Toe Board to be?
 
       The default is 3, so 3 rows and 3 columns, and 3
@@ -69,7 +67,7 @@ class TicTacToe
 
       You can go as high as 7:
     STRING
-    input_state = fsm.load_next_state "input", args, opts
+    input_state = self.input
     @game_opts[:board_size] = input_state.user_input
   end
 
