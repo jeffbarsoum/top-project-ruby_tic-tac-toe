@@ -13,8 +13,8 @@ class Play < GameState
     super param, value
   end
 
-  def run_cmd opts
-    super opts
+  def get_next_state
+    super
   end
 
 
