@@ -14,12 +14,10 @@ require "board"
 
 class TicTacToe
 
-  include DataCmds
-  include DataOpts
   include DataBoard
 
 
-  attr_reader :fsm, :game_opts, :matrix, :players, :stats, :game_save
+  attr_reader :fsm, :game_opts, :matrix, :players, :stats, :save
 
 
   def initialize save_data = false
@@ -34,32 +32,22 @@ class TicTacToe
 
     @matrix = Matrix.new self.game_opts[:board_size]
 
-    opts_hash = self.user_options :start, :load, :quit
-    opts = self.get_opts_arrayj opts_hash
-
-    # Display title screen
-    title_choice = self.return_user_input self.display.title, false, opts
-
-    # Launch appropriate screen
-    self.process_user_option title_choice
-
+    self.play_game
   end
 
   def load_players
-    opts_message = self.generate_opts "message", opts
-
     until Player.get_free_players.empty? do
-      args[:msg] = "What would you like us to call you this round?"
-      input_state = self.fsm.load_next_state "input", args, opts
+      msg = "What would you like us to call you this round?"
+      input_state = self.input msg
       player = Player.new input_state.user_input
       @players.push player
-      args[:msg] = "Hello, #{player.name}, you will be '#{player}''s"
-      message_state = self.fsm.load_next_state "message", args, opts
+      msg = "Hello, #{player.name}, you will be '#{player}''s"
+      message_state = self.message msg
     end
   end
 
   def load_board_size
-    opts[:msg] <<-STRING
+    msg <<-STRING
     How big do you want the Tic Tac Toe Board to be?
 
       The default is 3, so 3 rows and 3 columns, and 3
@@ -67,7 +55,7 @@ class TicTacToe
 
       You can go as high as 7:
     STRING
-    input_state = self.input
+    input_state = self.input msg
     @game_opts[:board_size] = input_state.user_input
   end
 
@@ -75,8 +63,8 @@ class TicTacToe
     is_quit = false
     state = self.title
     until is_quit do
-      is_quit = state.state_cmd == :quit
       next_state = state.get_next_state
+      is_quit = next_state == :quit
       state = self.send next_state
     end
   end
