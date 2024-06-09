@@ -27,13 +27,20 @@ class Stats
     @stats[:winner]
   end
 
-  def winner = w
-    @stats[:winner] = w
+  def add_score player
+    @stats[:score][player.to_sym] += 1
   end
 
-  def add_stat stat, data = nil
-    return @stats.[stat.to_sym] = data if stat.to_sym == :winner && data.is_a?
-    return @stats[stat.to_sym] += 1 if stat.to_sym == :round
-    @stats[stat.to_sym][data.to_sym] += 1
+  def add_turn player
+    @stats[:turn][player.to_sym] += 1
+  end
+
+  def add_round
+    @stats[:round] += 1
+  end
+
+  def add_winner data
+    return @stats.[:winner] = data if data.is_a? "Hash"
+    false
   end
 end
