@@ -18,7 +18,13 @@ class Matrix < Board
       sq_row.map { |sq| sq.square, Array.new sq.square.length, [self.border] }
       sq_row.unshift display_arr[-1]
 
-    matrix.reduce self.top_corner do |display, square_row|
+    matrix.each do |matrix_row|
+      matrix_row.reduce [] do |display_arr, square|
+        square.each_with_index do |square_row, i|
+          display_arr[i] += self.border
+          display_arr[i] += square_row[i]
+        end
+
       .flat_map { |x| [x, :a] }.tap(&:pop)
       square_row.reduce display do |display_row, square|
 
