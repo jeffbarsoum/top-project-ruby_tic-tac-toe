@@ -13,6 +13,17 @@ class Matrix < Board
     self.populate_matrix board_size
   end
 
+  def draw_board matrix = self.matrix
+    display_arr = matrix.each do |sq_row|
+      sq_row.map { |sq| sq.square, Array.new sq.square.length, [self.border] }
+      sq_row.unshift display_arr[-1]
+
+    matrix.reduce self.top_corner do |display, square_row|
+      .flat_map { |x| [x, :a] }.tap(&:pop)
+      square_row.reduce display do |display_row, square|
+
+
+
   def populate_matrix board_size
     begin
       raise MatrixError unless self.matrix.empty?
