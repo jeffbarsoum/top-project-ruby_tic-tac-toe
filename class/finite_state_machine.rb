@@ -5,14 +5,14 @@ class FiniteStateMachine
   include Error
   include Variablize
 
-  attr_reader :state_dir, :state_files, :states, :classes
+  attr_reader :state_dir, :state_files, :states, :game_save
 
 
   def initialize state_dir = "state"
     @state_dir = state_dir
     @state_files = self.get_state_file_list
     @states = []
-    @classes = []
+    @game_save = {}
   end
 
   def load_state state_file:, **opts
@@ -23,9 +23,9 @@ class FiniteStateMachine
     cls = Object.const_get cls_name
 
     if cls
-      self.classes.unshift { cls_name => cls }
       cls_instance = cls.new opts
-      self.instances.unshift { cls_name => cls_instance }
+      @states.unshift { cls_name => cls_instance }
+      @states.pop if @states.length > 10
     end
 
     cls_instance
