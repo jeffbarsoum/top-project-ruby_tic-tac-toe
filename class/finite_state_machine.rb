@@ -46,4 +46,13 @@ class FiniteStateMachine
     end
   end
 
+  def game_save
+    @game_save[:state_dir] = self.state_dir
+    @game_save[:state_files] = self.state_files
+    self.instances.each do |state|
+      @game_save[:states].push state.game_save
+    end
+    self.game_save
+  end
+
 end

@@ -47,4 +47,11 @@ class GameState
     msg_screen = "No screen loaded..."
   end
 
+  def game_save
+    {
+      class_name: self.class.name
+      state_opts: self.state_opts
+    }
+  end
+
 end

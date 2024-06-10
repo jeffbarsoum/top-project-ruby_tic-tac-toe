@@ -17,14 +17,24 @@ class TicTacToe
   include DataBoard
 
 
-  attr_reader :fsm, :game_opts, :matrix, :players, :stats, :save
+  attr_reader :fsm, :game_opts, :matrix, :players, :stats, :game_save, :top_score
+
+  def game_save
+    data = {
+      fsm: self.fsm.game_save,
+      game_opts: self.game_opts,
+      matrix: self.matrix.game_save,
+      players: self.players.game_save,
+      stats: self.stats.game_save
+    }
+
 
 
   def initialize save_data = false
     @fsm = FiniteStateMachine.new "game_state"
     @game_opts = {}
     @stats = Stats.new
-    @save = GameSave.new
+    @game_save = Save.new
     @players =  []
 
     self.load_players
