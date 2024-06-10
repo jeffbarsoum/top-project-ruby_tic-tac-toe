@@ -2,9 +2,6 @@ require "game_state"
 
 class Play < GameState
 
-  attr_reader :cmd
-
-
   def state_opts param = nil
     super param
   end
@@ -47,7 +44,7 @@ class Play < GameState
     super
   end
 
-  def display matrix:, players:, stats:
+  def display matrix, players, stats
     p1 = players[0]
     p2 = players[1]
     p1_score = stats[:score][p1.player.to_sym]
