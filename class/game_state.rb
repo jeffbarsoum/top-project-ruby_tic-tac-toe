@@ -9,7 +9,7 @@ class GameState
   include Display
   include Variablize
 
-  attr_reader :state_cmds, :state_opts, :next_state
+  attr_reader :state_opts, :game_save
 
   @@data = Data.new dir: "data", class_prefix: "Data"
 
@@ -21,7 +21,7 @@ class GameState
   def get_next_state
     user_input = self.screen self.state_opts
     user_output = self.process_user_input user_input
-    @next_state = user_output
+    self.state_opts = "next_state", user_output
   end
 
 
