@@ -41,6 +41,7 @@ class StateMachine
   end
 
   def get_state_file_list
+    return @state_files if @state_files
     Dir "../#{self.state_dir}/" .map do |state_file|
       state_file.basename
     end
