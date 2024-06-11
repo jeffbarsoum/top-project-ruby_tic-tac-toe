@@ -15,9 +15,7 @@ module DataBoard
   def border
     {
       top: "_",
-      side: "|",
-      bottom: "-",
-      corner: "+"
+      side: "|"
     }
   end
 
