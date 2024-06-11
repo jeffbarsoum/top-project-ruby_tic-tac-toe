@@ -52,23 +52,18 @@ class Matrix < Board
 
 
   def populate_matrix board_size
-    begin
-      raise MatrixError unless self.matrix.empty?
-      board_size.times do |row|
-        row_id = row + 1
-        row_array = []
-        board_size.times do |col|
-          col_id = 'a'..'z'[col]
-          coord = col_id + row_id.to_s
-          @coordinates.push coord
-          new_square = Square.new self.parse_coordinates coord
-          row_array.push new_square
-        end
-        @matrix.push row_array
+    return self.matrix unless self.matrix.empty?
+    board_size.times do |row|
+      row_id = row + 1
+      row_array = []
+      board_size.times do |col|
+        col_id = 'a'..'z'[col]
+        coord = col_id + row_id.to_s
+        @coordinates.push coord
+        new_square = Square.new self.parse_coordinates coord
+        row_array.push new_square
       end
-    rescue MatrixError
-      msg_bad_player_error = "game matrix already has pieces in it!"
-      self.error msg_bad_player_error
+      @matrix.push row_array
     end
   end
 
