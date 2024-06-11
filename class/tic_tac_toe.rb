@@ -31,7 +31,7 @@ class TicTacToe
 
 
   def initialize save_data = false
-    @fsm = FiniteStateMachine.new "game_state"
+    @fsm = GameStateMachine.new "game_state"
     @game_opts = {}
     @stats = Stats.new
     @game_save = Save.new
@@ -71,71 +71,12 @@ class TicTacToe
 
   def play_game
     is_quit = false
-    state = self.title
+    state = self.fsm.title
     until is_quit do
       next_state = state.get_next_state
       is_quit = next_state == :quit
       state = self.send next_state
     end
-  end
-
-  def back
-    self.fsm.get_state 1, ["Message", "Input"]
-  end
-
-  def input
-    self.fsm.load_state state_file: __method__.to_s
-  end
-
-  def load
-    self.fsm.load_state state_file: __method__.to_s
-  end
-
-  def message
-    self.fsm.load_state state_file: __method__.to_s
-  end
-
-  def play
-    coordinates = self.matrix.coordinates
-    until self.stats.winner || coordinates.empty? do
-      self.stats.add_turn self.get_current_player
-      opts = {
-        matrix: self.matrix,
-        players: self.players,
-        stats: self.stats
-      }
-      next_state = self.fsm.load_state state_file: __method__.to_s, opts
-      cmds = next_state.state_opts "state_cmds"
-      cmd = next_state.get_next_state
-      return cmd if cmds.keys.include? cmd
-      self.stats.add_winner "winner", self.matrix.assign_piece self.get_current_player, cmd
-      self.change_player_turn
-    end
-    self.stats.add_stat "round"
-    if self.stats.winner
-      winner = self.stats.winner[:player]
-      self.stats.add_score winner
-      return "win"
-    else
-      self.stats.add_score "draw"
-      return "draw"
-    end
-  end
-
-  def save
-    self.fsm.load_state state_file: __method__.to_s
-  end
-
-  def title
-    self.fsm.load_state state_file: __method__.to_s
-  end
-
-  def quit
-    self.fsm.load_state state_file: __method__.to_s
-  end
-
-  def win
-    self.fsm.load_state state_file: __method__.to_s
   end
 
 
@@ -151,6 +92,7 @@ class TicTacToe
     self.send command
   end
 
+  ##### MOVE TO DIFF CLASS?
   def get_current_player
     self.players[0]
   end
@@ -162,28 +104,7 @@ class TicTacToe
   def change_player_turn
     self.players.push self.players.shift
   end
-
-  def start
-    @players = []
-    until Player.get_free_players.empty? do
-      msg = "What would you like us to call you this round?"
-      name = self.return_user_input msg, false
-      self.players.push Player.new name
-    end
-    @board = Board.new
-    @stats = Stats.new
-
-    self.play_game
-  end
-
-  def quit
-    @is_quit = true
-  end
-
-  def save
-    @save.create_save self
-
-  end
+    ##### MOVE TO DIFF CLASS?
 
   def load
     save_cnt = self.save.count
