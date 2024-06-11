@@ -1,7 +1,7 @@
 require "error"
 require "variablize"
 
-class FiniteStateMachine
+class GameStateMachine < StateMachine
   include Error
   include Variablize
 
