@@ -99,4 +99,17 @@ class Title < GameState
 
   end
 
+  def load_board_size
+    msg <<-STRING
+    How big do you want the Tic Tac Toe Board to be?
+
+      The default is 3, so 3 rows and 3 columns, and 3
+      in a row wins
+
+      You can go as high as 7:
+    STRING
+    input_state = self.input msg
+    @game_opts[:board_size] = input_state.user_input
+  end
+
 end
