@@ -4,10 +4,6 @@ require "player"
 require "stats"
 require "game_save"
 
-require "title"
-require "message"
-require "input"
-
 require "cmds"
 require "opts"
 require "board"
