@@ -44,12 +44,10 @@ class GameStateMachine < StateMachine
     self.load_state state_file: __method__.to_s
   end
 
-  # NOTE: player functions should be placed elsewhere
-  # (another class, perhaps)
   def play matrix:, players:, stats:, **opts
     coordinates = matrix.coordinates
     until stats.winner || coordinates.empty? do
-      stats.add_turn self.get_current_player
+      stats.add_turn players.get_current_player
       opts = {
         matrix: matrix,
         players: players,
@@ -59,8 +57,8 @@ class GameStateMachine < StateMachine
       cmds = next_state.state_opts "state_cmds"
       cmd = next_state.get_next_state
       return cmd if cmds.keys.include? cmd
-      stats.add_winner "winner", matrix.assign_piece self.get_current_player, cmd
-      self.change_player_turn
+      stats.add_winner "winner", matrix.assign_piece players.get_current_player, cmd
+      players.change_player_turn
     end
     stats.add_stat "round"
     if stats.winner

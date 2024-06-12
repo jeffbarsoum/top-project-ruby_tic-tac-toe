@@ -35,25 +35,13 @@ class TicTacToe
     @game_opts = {}
     @stats = Stats.new
     @game_save = Save.new
-    @players =  []
+    @players = Players.new self.fsm, [:x, :o]
 
-    self.load_players
     self.load_board_size
 
     @matrix = Matrix.new self.game_opts[:board_size]
 
     self.play_game
-  end
-
-  def load_players
-    until Player.get_free_players.empty? do
-      msg = "What would you like us to call you this round?"
-      input_state = self.input msg
-      player = Player.new input_state.user_input
-      @players.push player
-      msg = "Hello, #{player.name}, you will be '#{player}''s"
-      message_state = self.message msg
-    end
   end
 
   def load_board_size
@@ -91,20 +79,6 @@ class TicTacToe
   def send_user_option command
     self.send command
   end
-
-  ##### MOVE TO DIFF CLASS?
-  def get_current_player
-    self.players[0]
-  end
-
-  def get_next_player
-    self.players[1]
-  end
-
-  def change_player_turn
-    self.players.push self.players.shift
-  end
-    ##### MOVE TO DIFF CLASS?
 
   def load
     save_cnt = self.save.count
