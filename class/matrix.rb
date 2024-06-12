@@ -65,16 +65,7 @@ class Matrix < Board
   private
 
   def check_winner
-    is_column_win = self.check_column
-    return is_column_win if is_column_win
-
-    is_row_win = self.check_row
-    return is_row_win if is_row_win
-
-    is_diagonal_win = self.check_diagonal
-    return is_diagonal_win if is_diagonal_win
-
-    false
+    return self.check_column || self.check_row || self.check_diagonal
   end
 
   def assign_winner
