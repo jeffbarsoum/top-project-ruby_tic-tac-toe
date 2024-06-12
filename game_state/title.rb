@@ -1,10 +1,7 @@
 require "game_state"
-require "player"
+require "players"
 
 class Title < GameState
-
-  attr_reader :cmd
-
 
   def state_opts param = nil
     super param
@@ -14,9 +11,14 @@ class Title < GameState
     super param, value
   end
 
-  def run_cmd opts
-    super opts
+  def get_next_state
+    super
   end
+
+  def game_save
+    super
+  end
+
 
 
   def initialize
