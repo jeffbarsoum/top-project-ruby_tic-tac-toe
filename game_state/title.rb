@@ -19,11 +19,34 @@ class Title < GameState
   end
 
 
-  def initialize **opts
+  def initialize
+    self.state_opts = "state_cmds", {
+      o: {
+        state: "start",
+        text: "Start"
+      },
+      l: {
+        state: "load",
+        text: "Load"
+      }
+      s: {
+        state: "save",
+        text: "Save"
+      },
+      q: {
+        state: "quit",
+        text: "Quit"
+      }
+    }
+    self.state_opts = "vertical", true
+    self.state_opts = "input?", false
+    self.state_opts = "any_text?", false
+
+    self.state_opts = "screen", self.display
     super opts
   end
 
-  def display _args = {}
+  def display
     msg_screen <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
                                         Tic Tac Toe!
@@ -35,6 +58,7 @@ class Title < GameState
   end
 
   def start
+
 
     opts_input = self.data.generate_opts "input", opts
     opts_message = self.data.generate_opts "message", opts
