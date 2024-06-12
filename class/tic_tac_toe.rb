@@ -17,7 +17,8 @@ class TicTacToe
   include DataBoard
 
 
-  attr_reader :fsm, :game_opts, :matrix, :players, :stats, :game_save, :top_score
+  attr_reader :fsm, :game_opts, :matrix, :stats, :game_save, :top_score
+  attr_accessor :players
 
   def game_save
     data = {
