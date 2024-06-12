@@ -19,7 +19,7 @@ class Play < GameState
   end
 
 
-  def initialize matrix:, players:, stats:
+  def initialize matrix:, players:, stats:, **opts
     self.state_opts = "state_cmds", {
       s: {
         state: "save",
