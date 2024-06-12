@@ -2,7 +2,7 @@
 $LOAD_PATH.unshift('save')
 $LOAD_PATH.unshift('module')
 $LOAD_PATH.unshift('class')
-$LOAD_PATH.unshift('state')
+$LOAD_PATH.unshift('game_state')
 
 # load required scripts here:
 require "tic_tac_toe"
