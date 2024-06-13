@@ -40,7 +40,8 @@ module Display
   def screen display:, state_cmds: [], screen_cmds: [], **opts
     vertical = opts[:vertical] || false
     input? = opts[:input?] || true
-    timeout = opts[:timeout] || 0
+    any_text? = opts[:any_text?] || false
+    timeout = opts[:timeout] || 1
 
     self.clear_screen
     if input?
