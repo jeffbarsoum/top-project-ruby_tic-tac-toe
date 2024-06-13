@@ -2,27 +2,26 @@ module DataCmds
 
   def cmds
     {
-      o: :start,
-      q: :quit,
-      s: :save,
-      l: :load,
-      b: :back,
-      r: :reset,
-      a: :play_again
-    }
-  end
-
-  def cmds
-    {
-      input: {
-        "input"
-      load: :l,
-      start: :o,
-      quit: :q,
-      save: :s,
-      back: :b,
-      reset: :reset,
-      a: :play_again
+      back: {
+        user_input: "b",
+        text: "Back"
+      }
+      load: {
+        user_input: "l",
+        text: "Load"
+      },
+      play: {
+        user_input: "p",
+        text: "Play"
+      },
+      save: {
+        user_input: "s",
+        text: "Save"
+      },
+      quit: {
+        user_input: "q",
+        text: "Quit"
+      }
     }
   end
 
