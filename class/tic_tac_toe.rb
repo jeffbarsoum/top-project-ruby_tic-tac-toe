@@ -1,7 +1,4 @@
 require "finite_state_machine"
-require "matrix"
-require "player"
-require "stats"
 require "game_save"
 
 require "cmds"
@@ -13,8 +10,8 @@ class TicTacToe
   include DataBoard
 
 
-  attr_reader :fsm, :game_opts, :matrix, :stats, :game_save, :top_score
-  attr_accessor :players
+  attr_reader :fsm, :game_opts, :game_save, :top_score
+  attr_accessor :matrix, :stats, :players
 
   def game_save
     data = {
@@ -30,28 +27,9 @@ class TicTacToe
   def initialize save_data = false
     @fsm = GameStateMachine.new "game_state"
     @game_opts = {}
-    @stats = Stats.new
     @game_save = Save.new
-    @players = Players.new self.fsm, [:x, :o]
-
-    self.load_board_size
-
-    @matrix = Matrix.new self.game_opts[:board_size]
 
     self.play_game
-  end
-
-  def load_board_size
-    msg <<-STRING
-    How big do you want the Tic Tac Toe Board to be?
-
-      The default is 3, so 3 rows and 3 columns, and 3
-      in a row wins
-
-      You can go as high as 7:
-    STRING
-    input_state = self.input msg
-    @game_opts[:board_size] = input_state.user_input
   end
 
   def play_game

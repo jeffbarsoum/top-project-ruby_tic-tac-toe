@@ -1,5 +1,7 @@
-require "error"
 require "variablize"
+require "players"
+require "matrix"
+require "stats"
 
 class GameStateMachine < StateMachine
   attr_reader :state_dir
@@ -44,7 +46,10 @@ class GameStateMachine < StateMachine
     self.load_state state_file: __method__.to_s
   end
 
-  def play matrix:, players:, stats:, **opts
+  def play **_opts
+    players = Players.new self, [:x, :o]
+    matrix = Matrix.new self
+    stats = Stats.new
     coordinates = matrix.coordinates
     until stats.winner || coordinates.empty? do
       stats.add_turn players.get_current_player
