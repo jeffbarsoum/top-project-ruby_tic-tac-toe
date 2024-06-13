@@ -34,13 +34,13 @@ class TicTacToe
 
   def play_game
     is_quit = false
-    state = self.fsm.title
+    state = self.fsm.run_state_cmd :title
     until is_quit do
       next_state = state.get_next_state
       output = state.state_opts :output
       output.each { |opt, value| self.send "#{opt}=".to_sym, value } if output.is_a? Hash
       is_quit = next_state == :quit
-      state = self.send next_state
+      state = self.fsm.run_state_cmd next_state
     end
   end
 
