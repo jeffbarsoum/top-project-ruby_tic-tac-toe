@@ -45,7 +45,7 @@ class TicTacToe
   end
 
 
-
+  ##### MARKED FOR DELETION
   def process_user_option input
     return unless USER_OPTIONS.has_val? input
     command = USER_OPTIONS.key input
@@ -81,34 +81,6 @@ class TicTacToe
     command_arr.reduce Hash.new do |opt_hash, opt|
       opt_hash[opt] = USER_OPTIONS[opt] if USER_OPTIONS.include? opt
       opt_hash
-    end
-  end
-
-  def play_turn
-    current_player = self.players[0]
-    matrix = self.board.matrix
-    self.display.board self.board
-    self.display.hud self.players, self.stats
-
-    coordinates = self.return_user_input "#{current_player.name}, your turn!"
-    matrix.assign_piece current_player.player, coordinates
-
-    # move the top player (the one whose turn it currently is) last
-    @players.push @players.unshift
-
-    matrix.check_winner
-  end
-
-  def play_game
-    until self.is_quit do
-      until @stats.winner do
-        @stats.winner = self.play_turn
-      end
-      display_win = self.display.win @stats.winner.player, self.get_opts_array
-      user_opt = self.return_user_input display_win, false, self.get_opts_array
-      self.board.matrix.assign_winner is_winner
-      msg = "#{current_player.name}, your turn!"
-      self.is_quit = coordinates = self.return_user_input
     end
   end
 
