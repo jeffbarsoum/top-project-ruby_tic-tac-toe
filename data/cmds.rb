@@ -27,7 +27,7 @@ module DataCmds
 
   def cmd user_input
     return false unless user_input
-    self.cmds[user_input]
+    self.cmds.each { |cmd, hash| return cmd if hash[:user_input] == user_input }
   end
 
   def cmd_arr cmd_hash
@@ -47,7 +47,7 @@ module DataCmds
   def cmd_hash cmd_arr
     return self.cmds unless cmd_arr
     cmd_arr.reduce {} do | hash, cmd |
-      hash[self.cmds.key cmd] = cmd
+      hash[cmd] = self.cmds[:cmd]
       hash
     end
   end
