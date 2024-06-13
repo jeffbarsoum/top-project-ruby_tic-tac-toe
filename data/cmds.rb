@@ -31,7 +31,17 @@ module DataCmds
   end
 
   def cmd_arr cmd_hash
-    state_hash.reduce [] { |cmd_hash, (input, cmd)| cmd_hash.push cmd; cmd_hash }
+    state_hash.reduce [] do |cmd_hash, (input, cmd)| 
+      cmd_hash.push cmd
+      cmd_hash
+    end
+  end
+
+  def user_input_arr cmd_arr
+    self.cmds.reduce [] do |input_arr, (cmd, cmd_hash)| 
+      input_arr.push cmd_hash[:user_input] if cmd_arr.include? cmd
+      input_arr
+    end
   end
 
   def cmd_hash cmd_arr
@@ -41,14 +51,5 @@ module DataCmds
       hash
     end
   end
-
-  def input_arr cmd_arr
-    return self.cmds unless cmd_arr
-    cmd_arr.reduce [] do | arr, cmd |
-      arr.push self.cmds.key cmd
-      arr
-    end
-  end
-
 
 end
