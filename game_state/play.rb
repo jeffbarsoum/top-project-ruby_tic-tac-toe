@@ -18,6 +18,13 @@ class Play < GameState
     super
   end
 
+  def cmd_arr cmd_hash
+    return [] unless cmd_hash.is_a? Hash
+    state_hash.reduce [] do |cmd_arr, (input, cmd_hash)|
+      cmd_arr.push cmd_hash[:state]
+      cmd_hash
+  end
+
 
   def initialize matrix:, players:, stats:, **opts
     self.state_opts = "state_cmds", {
