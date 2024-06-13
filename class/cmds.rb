@@ -1,7 +1,8 @@
-module DataCmds
+class Cmds
+  attr_reader :cmds
 
-  def cmds
-    {
+  def initialize
+    @cmds = {
       back: {
         user_input: "b",
         text: "Back"
