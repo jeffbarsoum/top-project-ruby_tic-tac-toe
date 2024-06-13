@@ -4,11 +4,25 @@ require_relative "square"
 class Matrix < Board
   include DataBoard
 
-  attr_reader :matrix, :coordinates
+  attr_reader :board_size, :matrix, :coordinates
 
 
-  def initialize board_size
-    self.populate_matrix board_size
+  def initialize fsm
+    @board_size = self.load_board_size fsm
+    self.populate_matrix self.board_size
+  end
+
+  def load_board_size fsm
+    msg <<-STRING
+    How big do you want the Tic Tac Toe Board to be?
+
+      The default is 3, so 3 rows and 3 columns, and 3
+      in a row wins
+
+      You can go as high as 7:
+    STRING
+    input_state = fsm.input msg
+    input_state.user_input
   end
 
   def populate_matrix board_size
