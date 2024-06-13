@@ -11,17 +11,15 @@ class GameState
 
   attr_reader :state_opts, :game_save
 
-  @@data = Data.new dir: "data", class_prefix: "Data"
-
   def initialize
-    self.state_opts = "state_name", self.script_name self.class.name
+    self.state_opts = :state_name, self.script_name self.class.name
     self.get_next_state
   end
 
   def get_next_state
     user_input = self.screen self.state_opts
     user_output = self.process_user_input user_input
-    self.state_opts = "next_state", user_output
+    self.state_opts = :next_state, user_output
   end
 
 
@@ -34,7 +32,7 @@ class GameState
   end
 
   def state_opts param = nil
-    return @state_opts[param.to_sym] if param
+    return @state_opts[param] if param
     @state_opts
   end
 
