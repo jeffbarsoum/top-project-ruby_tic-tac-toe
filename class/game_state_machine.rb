@@ -58,21 +58,21 @@ class GameStateMachine < StateMachine
         players: players,
         stats: stats
       }
-      next_state = self.load_state state_file: __method__.to_s, opts
+      next_state = self.load_state state_file: __method__, opts
       cmds = next_state.state_opts "state_cmds"
       cmd = next_state.get_next_state
       return cmd if cmds.keys.include? cmd
-      stats.add_winner "winner", matrix.assign_piece players.get_current_player, cmd
+      stats.add_winner :winner, matrix.assign_piece players.get_current_player, cmd
       players.change_player_turn
     end
-    stats.add_stat "round"
+    stats.add_stat :round
     if stats.winner
       winner = stats.winner[:player]
       stats.add_score winner
-      return "win"
+      return :win
     else
-      stats.add_score "draw"
-      return "draw"
+      stats.add_score :draw
+      return :draw
     end
   end
 
