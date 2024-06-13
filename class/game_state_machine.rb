@@ -20,6 +20,10 @@ class GameStateMachine < StateMachine
     super offset, cls_skip
   end
 
+  def run_state_cmd state_file:, **opts
+    return super state_file, opts
+  end
+
   def get_state_file_list
     super
   end
@@ -32,18 +36,6 @@ class GameStateMachine < StateMachine
   # State Methods: Each method launches a game_state instance
   def back **opts
     self.get_state 1, ["Message", "Input"]
-  end
-
-  def input **opts
-    self.load_state state_file: __method__.to_s
-  end
-
-  def load **opts
-    self.load_state state_file: __method__.to_s
-  end
-
-  def message **opts
-    self.load_state state_file: __method__.to_s
   end
 
   def play **_opts
@@ -76,19 +68,4 @@ class GameStateMachine < StateMachine
     end
   end
 
-  def save **opts
-    self.load_state state_file: __method__.to_s
-  end
-
-  def title **opts
-    self.load_state state_file: __method__.to_s
-  end
-
-  def quit **opts
-    self.load_state state_file: __method__.to_s
-  end
-
-  def win **opts
-    self.load_state state_file: __method__.to_s
-  end
 end

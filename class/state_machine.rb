@@ -40,6 +40,14 @@ class StateMachine
     end
   end
 
+  # Load override logic
+  def run_state_cmd state_file:, **opts
+    # Call the state machine's load function,
+    # unless a method for the state file exists here
+    return self.load_state state_file, opts unless self.respond_to? state_file
+    self.send state_file, opts
+  end
+
   def get_state_file_list
     return @state_files if @state_files
     Dir "../#{self.state_dir}/" .map do |state_file|
