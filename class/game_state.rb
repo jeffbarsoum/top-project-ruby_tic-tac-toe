@@ -22,15 +22,6 @@ class GameState
     self.state_opts = :next_state, user_output
   end
 
-
-  def data
-    @@data
-  end
-
-  def process_user_input user_input
-    self.state_cmds[user_input.to_sym][:state]
-  end
-
   def state_opts param = nil
     return @state_opts[param] if param
     @state_opts
