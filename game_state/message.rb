@@ -2,9 +2,6 @@ require "game_state"
 
 class Message < GameState
 
-  attr_reader :cmd
-
-
   def state_opts param = nil
     super param
   end
@@ -13,40 +10,40 @@ class Message < GameState
     super param, value
   end
 
-  def run_cmd opts
-    super opts
+  def get_next_state
+    super
+  end
+
+  def game_save
+    super
   end
 
 
-  def initialize **opts
-    super opts
+  def initialize message:, state_cmds:, **opts
+    self.state_opts = :state_hash, self.cmds.cmd_hash state_cmds || [:back, :quit]
+    self.state_opts = :state_cmds, self.cmds.user_input_arr state_cmds || [:back, :quit]
+
+    self.state_opts = :display, self.display message
+    self.state_opts = :vertical, false
+    self.state_opts = :input?, false
+    self.state_opts = :any_text?, false
+    self.state_opts = :timeout, 3
+
+    super
   end
 
-  def display _args = {}
+  def display message
     msg_screen <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-                                        Tic Tac Toe!
+    Yerrrrrrrr...
+    ------------------------------------------------------------------------------------
+    #{message}
+    ------------------------------------------------------------------------------------
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-
-    Please press a key to choose your option:
 
     STRING
   end
 
-  def start
-
-  end
-
-  def load
-
-  end
-
-  def save
-
-  end
-
-  def quit
-
-  end
+end
 
 end

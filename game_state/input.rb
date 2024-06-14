@@ -2,9 +2,6 @@ require "game_state"
 
 class Input < GameState
 
-  attr_reader :cmd
-
-
   def state_opts param = nil
     super param
   end
@@ -13,33 +10,37 @@ class Input < GameState
     super param, value
   end
 
-  def run_cmd opts
-    super opts
+  def get_next_state
+    super
+  end
+
+  def game_save
+    super
   end
 
 
-  def initialize **opts
-    super opts
+  def initialize message:, any_text?:, state_cmds:, **opts
+    self.state_opts = :state_hash, self.cmds.cmd_hash state_cmds || [:back, :quit]
+    self.state_opts = :state_cmds, self.cmds.user_input_arr state_cmds || [:back, :quit]
+
+    self.state_opts = :display, self.display message
+    self.state_opts = :vertical, false
+    self.state_opts = :input?, true
+    self.state_opts = :any_text?, any_text?
+
+    super
   end
 
-  def display question
+  def display message
     msg_screen <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
     Yerrrrrrrr, question, famo...
     ------------------------------------------------------------------------------------
-    #{question}
+    #{message}
     ------------------------------------------------------------------------------------
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
 
     STRING
-  end
-
-  def back
-
-  end
-
-  def quit
-
   end
 
 end
