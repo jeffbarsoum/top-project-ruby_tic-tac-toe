@@ -40,7 +40,7 @@ class Stats
   end
 
   def add_winner data
-    return @stats.[:winner] = data if data.is_a? "Hash"
+    return @stats[:winner] = data if data.is_a? "Hash"
     false
   end
 end
