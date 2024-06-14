@@ -104,6 +104,7 @@ class Matrix < Board
     board_data.each do |type, hsh|
       hsh.each do |id, result|
         return { col_type: type, id: id } if result == true
+        hsh[type].delete id if result == false
       end
     end
     board_data
