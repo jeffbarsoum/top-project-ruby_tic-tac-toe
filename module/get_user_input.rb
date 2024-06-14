@@ -8,14 +8,10 @@ module GetUserInput
 
     result = gets.chomp if get_input
 
-    if print_spacing
+  def print_spacing
         print "\n"
         print "########################################################################\n\n"
         print "\n"
-    end
-
-    # Only return the result if we got user input (get_input == true)
-    result if get_input
   end
 
   def return_user_input message:, multi_entry: false, user_options: [':q'], **opts
