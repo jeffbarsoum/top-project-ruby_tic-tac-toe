@@ -6,12 +6,6 @@ module GetUserInput
     result = gets.chomp if get_input
   end
 
-  def print_spacing
-    print "\n"
-    print "########################################################################\n\n"
-    print "\n"
-  end
-
   def return_user_input message:, multi_entry: false, user_options: [':q'], **opts
     any_text? = opts[:any_text?] || false
 
@@ -31,9 +25,6 @@ module GetUserInput
       dictionary.push format_val user_input unless user_selection
       break unless multi_entry
     end
-
-    # just printing some spacing
-    self.print_spacing
 
     # create a hash for the return result
     result = { user_option: user_selection, dictionary: dictionary}

@@ -68,13 +68,17 @@ module Display
 
   def opts_display state_hash, vertical = false
     spacing = vertical ? "\n" : " | "
-    return_string = "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
+    return_string = self.print_spacing
     # concatenate all options in a given hash
     return_string += state_hash.reduce return_string do |display, (cmd, hash)|
       display += "#{hash[:text]}: #{hash[:user_input]}#{spacing}"
       display
     end
-    return_string += "XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO\n"
+    return_string += self.print_spacing
+  end
+
+  def print_spacing
+    "\n\nXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOn\n"
   end
 
   def clear_screen
