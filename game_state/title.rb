@@ -22,25 +22,14 @@ class Title < GameState
 
 
   def initialize
-    self.state_opts = "state_cmds", {
-      p: {
-        state: :play,
-        text: "Start"
-      },
-      l: {
-        state: :load,
-        text: "Load"
-      }
-      q: {
-        state: :quit,
-        text: "Quit"
-      }
-    }
+    self.state_opts = :state_hash, self.cmds.cmd_hash [:play, :load, :quit]
+    self.state_opts = :state_cmds, self.cmds.user_input_arr [:play, :load, :quit]
+
+    self.state_opts = :display, self.display
     self.state_opts = :vertical, true
     self.state_opts = :input?, false
     self.state_opts = :any_text?, false
 
-    self.state_opts = :screen, self.display
     super
   end
 
