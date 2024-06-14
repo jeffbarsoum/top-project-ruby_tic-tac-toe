@@ -53,7 +53,7 @@ class Play < GameState
     rnd = stats[:round]
 
     msg_hud <<-STRING
-
+    #{self.draw_board matrix}
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
     Round ##{rnd}, Turn ##{p1_turn}
     ------------------------------------------------------------------------------------
