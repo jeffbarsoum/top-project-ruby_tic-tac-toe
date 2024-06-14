@@ -72,64 +72,41 @@ class Matrix < Board
     self.get_piece coordinates .assign_player player
     @coordinates.delete coordinates
 
-    self.assign_winner
+    self.check_matrix player
   end
 
-
-  private
-
-  def check_winner
-    return self.check_column || self.check_row || self.check_diagonal
+  def check_win piece_arr, player
+    check_arr = piece_arr.map { |piece| piece.player }
+    assigned_arr = [check_arr - nil]
+    can_win? = assigned_arr.uniq.length == 1 && assigned_arr.first == player
+    is_win? = can_win? && check_arr == assigned_arr
+    return false unless can_win?
+    return true if is_win?
+    check_arr.length - assigned_arr.length
   end
 
-  def assign_winner
-    win_array = self.check_winner
-    return false unless win_array
-
-    win_pieces = win_array[0]
-    win_type = win_array[1]
-
-    win_pieces.each |piece| do { piece.assign_win win_type }
-
-    win_array
-  end
-
-  def check_row
-    self.matrix.each_with_index do |row, i|
-      is_match =  row.uniq.count == 1
-      return { squares: row[0], player: row[0][0].player, win_type: :horizontal } if is_match
-    end
-    return false
-  end
-
-  def check_column
-    self.matrix.each_with_index do |row, i|
-      col_array = []
-      self.matrix.each_with_index do |col, i|
-        col_array.push self.matrix[row][col]
+  def check_matrix player
+    board_data = {}
+    for i in 0..self.board_size
+      col_arr = []
+      diag_left_arr = []
+      diag_right_arr = []
+      for j in 0..self.board_size
+        col_arr.push self.matrix[j][i]
+        diag_left_arr.push self.matrix[j][j]
+        diag_right_arr.push self.matrix[j][self.board_size - 1 - j]
       end
-      is_match =  col_array.uniq.count == 1
-      return { squares: col_array, player: col_array[0].player, win_type: :vertical } if is_match
+      board_data[:row][i] = self.check_win self.matrix[i], player
+      board_data[:col][i] = self.check_win col_arr, player
+      board_data[:diagonal][:left] = self.check_win diag_left_arr, player
+      board_data[:diagonal][:right] = self.check_win diag_right_arr, player
     end
-    return false
-  end
-
-  def check_diagonal
-    left_diagonal_array = []
-    right_diagonal_array = []
-
-    self.matrix.each_with_index do |row, i|
-      left_diagonal_array.push self.matrix[row][row]
-      right_diagonal_array.push self.matrix[row][self.matrix.length - 1 - row]
+    board_data.each do |type, hsh|
+      hsh.each do |id, result|
+        return { col_type: type, id: id } if result == true
+      end
     end
-
-    is_left_match =  left_diagonal_array.uniq.count == 1
-    return { squares: left_diagonal_array, player: left_diagonal_array[0].player, win_type: :left_diagonal } if is_left_match
-
-    is_right_match =  right_diagonal_array.uniq.count == 1
-    return { squares: right_diagonal_array, player: right_diagonal_array[0].player, win_type: :right_diagonal } if is_right_match
-
-    return false
+    board_data
   end
 
 end
