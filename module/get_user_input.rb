@@ -1,12 +1,10 @@
 module GetUserInput
   # A function to pull input from the user
-  # Can choose to print spacing, or get input, either or both
-  def get_user_input print_spacing = false, get_input = true
-
+  def get_user_input
     # an indicator to mark the user's input in the console
     print "--> "
-
     result = gets.chomp if get_input
+  end
 
   def print_spacing
         print "\n"
