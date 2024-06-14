@@ -18,7 +18,9 @@ module GetUserInput
     result if get_input
   end
 
-  def return_user_input message, multi_entry = false, user_options = [':q']
+  def return_user_input message:, multi_entry: false, user_options: [':q'], **opts
+    any_text? = opts[:any_text?] || false
+
     user_input = nil
     user_selection = nil
     dictionary = []
