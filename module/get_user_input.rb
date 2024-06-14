@@ -7,9 +7,9 @@ module GetUserInput
   end
 
   def print_spacing
-        print "\n"
-        print "########################################################################\n\n"
-        print "\n"
+    print "\n"
+    print "########################################################################\n\n"
+    print "\n"
   end
 
   def return_user_input message:, multi_entry: false, user_options: [':q'], **opts
@@ -26,14 +26,14 @@ module GetUserInput
     # 'q' is a default, it quits entry
     #  you can change 'q' to something else, but 'quit' is always the first option
     until user_options.include? user_selection do
-      user_input = get_user_input
-      user_selection = user_input if user_options.include? user_input
+      user_input = self.get_user_input
+      user_selection = user_input if user_options.include? user_input || any_text?
       dictionary.push format_val user_input unless user_selection
       break unless multi_entry
     end
 
     # just printing some spacing
-    get_user_input true, false
+    self.print_spacing
 
     # create a hash for the return result
     result = { user_option: user_selection, dictionary: dictionary}
