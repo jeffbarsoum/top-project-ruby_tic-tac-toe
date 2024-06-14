@@ -37,7 +37,7 @@ module Display
     self.board.draw_board
   end
 
-  def screen display:, state_cmds: [], screen_cmds: [], **opts
+  def screen display:, state_hash:, state_cmds: [], screen_cmds: [], **opts
     vertical = opts[:vertical] || false
     input? = opts[:input?] || true
     any_text? = opts[:any_text?] || false
@@ -45,9 +45,14 @@ module Display
 
     self.clear_screen
     if input?
-      state_hash = self.cmd_hash state_cmds
       screen_str = display + self.opts_display state_hash, vertical
-      self.return_user_input screen_str, false, state_cmds + screen_cmds
+      user_input_opts = {
+        message: screen_str,
+        multi_entry: false,
+        user_options: state_cmds + screen_cmds,
+        any_text?: any_text?
+      }
+      self.return_user_input user_input_opts
     else
       puts display
       sleep timeout
