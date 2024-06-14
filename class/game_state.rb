@@ -1,7 +1,7 @@
 require "finite_state_machine"
 require "display"
 require "get_user_input"
-require "data"
+require "cmds"
 
 class GameState
 
@@ -9,7 +9,7 @@ class GameState
   include Display
   include Variablize
 
-  attr_reader :state_opts, :game_save
+  attr_reader :state_opts, :cmds, :game_save
 
   def initialize
     self.state_opts = :state_name, self.script_name self.class.name
@@ -39,20 +39,6 @@ class GameState
   def state_opts=param, value
     @state_opts = {} unless self.state_opts
     @state_opts[param] = value
-  end
-
-  def cmd_arr cmd_hash
-    return [] unless cmd_hash.is_a? Hash
-    state_hash.reduce [] do |cmd_arr, (input, cmd_hash)|
-      cmd_arr.push cmd_hash[:state]
-      cmd_arr
-  end
-
-  def cmd_hash user_input_arr
-    return [] unless cmd_hash.is_a? Hash
-    user_input_arr.reduce [] do |cmd_hash, user_input|
-      cmd_arr.push cmd_hash[:state]
-      cmd_hash
   end
 
   def display _args
