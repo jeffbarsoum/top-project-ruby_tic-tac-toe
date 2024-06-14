@@ -32,12 +32,15 @@ class StateMachine
   end
 
   def get_state offset = 0, cls_skip = []
-    until offset > self.states.length - 1 do
+    is_skip = false
+    back_state = nil
+    while is_skip || offset <= self.states.length - 1 do
       back_state = self.states[offset]
       is_skip = cls_skip.include? back_state.class.name
-      return back_state unless is_skip
       offset += 1
     end
+    return back_state.get_next_state if back_state
+    false
   end
 
   # Load override logic
