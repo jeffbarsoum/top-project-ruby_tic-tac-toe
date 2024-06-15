@@ -36,11 +36,16 @@ class GameState
     msg_screen = "No screen loaded..."
   end
 
-  def game_save
+  def save
     {
-      class_name: self.class.name
+      class: self
       state_opts: self.state_opts
     }
+  end
+
+  def load game_save
+    @game_save = game_save
+    @state_opts = game_save[:state_opts]
   end
 
 end

@@ -58,13 +58,26 @@ class StateMachine
     end
   end
 
-  def game_save
+  def save
     @game_save[:state_dir] = self.state_dir
     @game_save[:state_files] = self.state_files
-    self.instances.each do |state|
-      @game_save[:states].push state.game_save
+    @game_save[:states] = []
+    self.states.each do |state|
+      @game_save[:states].push  state.save
     end
     self.game_save
+  end
+
+  def load game_save
+    @game_save = game_save
+    @state_dir = game_save[:state_dir]
+    @state_files = self.get_state_file_list
+    @states = []
+    @game_save[:states].each do |state|
+      inst = state[:class].new state[:state_opts]
+      inst.load
+      @states.push inst
+    end
   end
 
 end

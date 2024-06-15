@@ -88,4 +88,19 @@ class Square < Matrix
     puts self.player
   end
 
+  def save
+    @game_save[:coordinates] = self.coordinates
+    @game_save[:player] = self.player
+    @game_save[:square] = self.square
+    self.game_save
+  end
+
+  def load game_save
+    self.game_save = game_save
+    @player = game_save[:player]
+    @coordinates = game_save[:coordinates]
+    @square = game_save[:square]
+  end
+
+
 end
