@@ -20,4 +20,7 @@ class Computer < Player
     puts self.player
   end
 
+  def get_closest_win player, matrix
+  end
+    
 end
