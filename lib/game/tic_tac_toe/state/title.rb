@@ -1,13 +1,13 @@
 require "game_state"
 require "players"
 
-class Title < GameState
+class State::Title < State
 
-  def state_opts param = nil
+  def opts param = nil
     super param
   end
 
-  def state_opts=param, value
+  def opts=param, value
     super param, value
   end
 
@@ -22,13 +22,13 @@ class Title < GameState
 
 
   def initialize
-    self.state_opts = :state_hash, self.cmds.cmd_hash [:play, :load, :quit]
-    self.state_opts = :state_cmds, self.cmds.user_input_arr [:play, :load, :quit]
+    self.opts = :hash, self.cmds.cmd_hash [:play, :load, :quit]
+    self.opts = :cmds, self.cmds.user_input_arr [:play, :load, :quit]
 
-    self.state_opts = :display, self.display
-    self.state_opts = :vertical, true
-    self.state_opts = :input?, false
-    self.state_opts = :any_text?, false
+    self.opts = :display, self.display
+    self.opts = :vertical, true
+    self.opts = :input?, false
+    self.opts = :any_text?, false
 
     super
   end

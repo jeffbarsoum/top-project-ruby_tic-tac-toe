@@ -1,12 +1,12 @@
 require "game_state"
 
-class Input < GameState
+class State::Message < State
 
-  def state_opts param = nil
+  def opts param = nil
     super param
   end
 
-  def state_opts=param, value
+  def opts=param, value
     super param, value
   end
 
@@ -19,14 +19,15 @@ class Input < GameState
   end
 
 
-  def initialize message:, any_text?:, state_cmds:, **opts
-    self.state_opts = :state_hash, self.cmds.cmd_hash state_cmds || [:back, :quit]
-    self.state_opts = :state_cmds, self.cmds.user_input_arr state_cmds || [:back, :quit]
+  def initialize message:, cmds:, **opts
+    self.opts = :hash, self.cmds.cmd_hash cmds || [:back, :quit]
+    self.opts = :cmds, self.cmds.user_input_arr cmds || [:back, :quit]
 
-    self.state_opts = :display, self.display message
-    self.state_opts = :vertical, false
-    self.state_opts = :input?, true
-    self.state_opts = :any_text?, any_text?
+    self.opts = :display, self.display message
+    self.opts = :vertical, false
+    self.opts = :input?, false
+    self.opts = :any_text?, false
+    self.opts = :timeout, 3
 
     super
   end
@@ -34,7 +35,7 @@ class Input < GameState
   def display message
     msg_screen <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
-    Yerrrrrrrr, question, famo...
+    Yerrrrrrrr...
     ------------------------------------------------------------------------------------
     #{message}
     ------------------------------------------------------------------------------------
@@ -42,5 +43,7 @@ class Input < GameState
 
     STRING
   end
+
+end
 
 end

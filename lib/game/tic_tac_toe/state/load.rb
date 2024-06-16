@@ -1,15 +1,15 @@
 require "game_state"
 
-class Load < GameState
+class State::Load < State
 
   attr_reader :cmd
 
 
-  def state_opts param = nil
+  def opts param = nil
     super param
   end
 
-  def state_opts=param, value
+  def opts=param, value
     super param, value
   end
 

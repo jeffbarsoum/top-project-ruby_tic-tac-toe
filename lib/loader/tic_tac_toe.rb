@@ -5,7 +5,7 @@ require "cmds"
 require "opts"
 require "board"
 
-class TicTacToe
+class Loader::TicTacToe < Loader
 
   include DataBoard
 
@@ -32,7 +32,7 @@ class TicTacToe
     self.play_game
   end
 
-  def play_game
+  def load_game
     is_quit = false
     state = self.fsm.run_state_cmd :title
     until is_quit do

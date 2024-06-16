@@ -1,30 +1,30 @@
-class Generator
+class Loader
 
-    def generate_players
+    def load_players
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
-    def generate_player
+    def load_player
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
-    def generate_state_machine
+    def load_state_machine
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
-    def generate_stats
+    def load_stats
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
-    def generate_save
+    def load_save
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
-    def generate_top_score
+    def load_top_score
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
-    def generate_game
+    def load_game
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 

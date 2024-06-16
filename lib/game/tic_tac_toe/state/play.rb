@@ -1,12 +1,12 @@
 require "game_state"
 
-class Play < GameState
+class State::Play < State
 
-  def state_opts param = nil
+  def opts param = nil
     super param
   end
 
-  def state_opts=param, value
+  def opts=param, value
     super param, value
   end
 
@@ -20,18 +20,18 @@ class Play < GameState
 
 
   def initialize matrix:, players:, stats:, **opts
-    self.state_opts = :state_hash, self.cmds.cmd_hash [:save, :quit]
-    self.state_opts = :state_cmds, self.cmds.user_input_arr [:save, :quit]
-    self.state_opts = :screen_cmds, matrix.coordinates
+    self.opts = :hash, self.cmds.cmd_hash [:save, :quit]
+    self.opts = :cmds, self.cmds.user_input_arr [:save, :quit]
+    self.opts = :screen_cmds, matrix.coordinates
 
-    self.state_opts = :display, self.display matrix, players, stats
-    self.state_opts = :vertical, true
-    self.state_opts = :input?, true
-    self.state_opts = :any_text?, false
+    self.opts = :display, self.display matrix, players, stats
+    self.opts = :vertical, true
+    self.opts = :input?, true
+    self.opts = :any_text?, false
 
-    self.state_opts = :matrix, matrix
-    self.state_opts = :players, players
-    self.state_opts = :stats, stats
+    self.opts = :matrix, matrix
+    self.opts = :players, players
+    self.opts = :stats, stats
 
     super
   end
@@ -61,7 +61,7 @@ class Play < GameState
     msg_hud
   end
 
-  def draw_board matrix = self.state_opts :matrix
+  def draw_board matrix = self.opts :matrix
     top = "_"
     side = "|"
     # transpose the square arrays into one array row per pixel

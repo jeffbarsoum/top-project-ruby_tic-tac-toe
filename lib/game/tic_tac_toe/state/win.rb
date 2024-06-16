@@ -1,15 +1,15 @@
-require "game_state"
+require "state"
 
-class Win < GameState
+class State::Win < State
 
   attr_reader :cmd
 
 
-  def state_opts param = nil
+  def opts param = nil
     super param
   end
 
-  def state_opts=param, value
+  def opts=param, value
     super param, value
   end
 

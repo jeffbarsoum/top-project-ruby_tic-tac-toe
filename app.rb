@@ -1,11 +1,11 @@
 # Add load paths here:
+$LOAD_PATH.unshift('lib/loader')
+$LOAD_PATH.unshift('lib/module')
+$LOAD_PATH.unshift('lib/class')
 $LOAD_PATH.unshift('save')
-$LOAD_PATH.unshift('module')
-$LOAD_PATH.unshift('class')
-$LOAD_PATH.unshift('game_state')
 
 # load required scripts here:
-require "tic_tac_toe"
+require "loader"
 
 # launch application:
 TicTacToe.new
