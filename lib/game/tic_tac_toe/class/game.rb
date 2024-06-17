@@ -6,8 +6,8 @@ class TicTacToe::Game < Game
   attr_reader :board_size, :matrix, :coordinates
 
 
-  def initialize fsm
-    @board_size = self.load_board_size fsm
+  def initialize board_size
+    @board_size = board_size
     self.populate_matrix self.board_size
   end
 

@@ -2,25 +2,12 @@ require "lib/class/players"
 
 class TicTacToe::Players < Players
 
-  attr_reader :players, :free_players, :chosen_players
+  attr_reader :array, :free_players, :chosen_players
 
 
-  def initialize fsm, player_ids = [:x, :o]
+  def initialize player_ids = [:x, :o]
     @free_players = player_ids
     @chosen_players = []
-    self.load_players fsm
-  end
-
-  def load_players fsm
-    until self.free_players.empty? do
-      player_id = self.choose_player
-      msg = "What would you like us to call you this round?"
-      input_state = fsm.input msg
-      player = Player.new input_state.user_input, player_id
-      @players.push player
-      msg = "Hello, #{player.name}, you will be '#{player}''s"
-      message_state = self.message msg
-    end
   end
 
   def choose_player
