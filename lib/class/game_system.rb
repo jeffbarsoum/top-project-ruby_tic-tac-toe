@@ -1,7 +1,7 @@
 require "lib/module/error"
 require "lib/module/variablize"
 
-class Loader
+class GameSystem
     include Error
     include Variablize
 
