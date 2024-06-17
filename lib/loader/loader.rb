@@ -24,10 +24,6 @@ class Loader
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
 
-    def load_player
-        raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
-    end
-
     def load_state_machine
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
