@@ -16,6 +16,10 @@ class Loader
         Object.const_get cls_name
     end
 
+    def load_cmds
+        raise NotImplementedError, self.error "Method not implemented, famo..."
+    end
+
     def load_players
         raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
     end
