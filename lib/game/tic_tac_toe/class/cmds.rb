@@ -1,4 +1,6 @@
-class Cmds
+require "lib/class/cmds"
+
+class TicTacToe::Cmds < Cmds
   attr_reader :cmds
 
   def initialize

@@ -1,4 +1,5 @@
-class Player
+require "lib/class/player_human"
+class TicTacToe::PlayerHuman < PlayerHuman
 
   attr_reader :name, :player, :score
 

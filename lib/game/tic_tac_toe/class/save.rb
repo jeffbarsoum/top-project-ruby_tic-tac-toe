@@ -1,6 +1,6 @@
-require 'yaml'
+require 'lib/class/save'
 
-class Save
+class TicTacToe::Save < Save
 
   attr_reader :save_directory, :data_list, :load_data
 

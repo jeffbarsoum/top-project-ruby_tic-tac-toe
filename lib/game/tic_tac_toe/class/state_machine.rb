@@ -1,9 +1,6 @@
-require "variablize"
-require "players"
-require "matrix"
-require "stats"
+require "lib/class/state_machine"
 
-class GameStateMachine < StateMachine
+class TicTacToe::StateMachine < StateMachine
   attr_reader :state_dir
 
   # Parent Methods: All finite state machines will use these

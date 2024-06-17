@@ -1,6 +1,6 @@
-require "game_state"
+require "lib/class/state"
 
-class State::Message < State
+class TicTacToe::State::Message < State
 
   def opts param = nil
     super param

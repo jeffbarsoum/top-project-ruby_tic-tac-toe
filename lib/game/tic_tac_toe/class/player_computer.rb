@@ -1,7 +1,6 @@
-require "player"
-require "matrix"
+require 'lib/class/player_computer'
 
-class Computer < Player
+class TicTacToe::PlayerComputer < PlayerComputer
 
   attr_reader :name, :player, :score
 
@@ -22,5 +21,5 @@ class Computer < Player
 
   def get_closest_win player, matrix
   end
-    
+
 end

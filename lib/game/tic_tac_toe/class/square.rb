@@ -1,7 +1,7 @@
 require "matrix"
 require "data"
 
-class Square
+class TicTacToe::Square
   include DataSquares
 
   attr_reader :coordinates, :player, :square

@@ -1,7 +1,6 @@
-require_relative "board"
-require_relative "square"
+require 'lib/class/game'
 
-class Matrix < Board
+class TicTacToe::Game < Game
   include DataBoard
 
   attr_reader :board_size, :matrix, :coordinates

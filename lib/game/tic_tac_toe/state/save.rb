@@ -1,6 +1,6 @@
-require "state"
+require "lib/class/state"
 
-class State::Title < State
+class TicTacToe::State::Title < State
 
   attr_reader :cmd
 

@@ -1,6 +1,6 @@
-require "player"
+require "lib/class/players"
 
-class Players
+class TicTacToe::Players < Players
 
   attr_reader :players, :free_players, :chosen_players
 
