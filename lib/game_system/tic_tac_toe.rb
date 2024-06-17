@@ -5,7 +5,7 @@ require "cmds"
 require "opts"
 require "board"
 
-class Loader::TicTacToe < Loader
+class GameSystem::TicTacToe < GameSystem
 
   include DataBoard
 
