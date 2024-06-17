@@ -44,44 +44,4 @@ class Loader::TicTacToe < Loader
     end
   end
 
-
-  ##### MARKED FOR DELETION
-  def process_user_option input
-    return unless USER_OPTIONS.has_val? input
-    command = USER_OPTIONS.key input
-    return unless command
-    self.send_user_option command
-  end
-
-  def send_user_option command
-    self.send command
-  end
-
-  def load
-    save_cnt = self.save.count
-    opts_arr = 1..save_cnt.to_a.push get_opts_array self.user_options :quit
-    save_choice = self.return_user_input self.display.saves self.save.data, false, opts_arr
-    load_data = self.save.data[i + 1] if opt_arr.include?(save_choice.to_i + 1)
-
-    @players = load_data[:data][:players]
-    @board = load_data[:data][:board]
-    @stats = load_data[:data][:stats]
-
-    self.play_game
-  end
-
-  def get_opts_array opts_hash = USER_OPTIONS
-    opts_hash.reduce [] do |opt_arr, (opt_name, opt)|
-      opt_arr.push opt
-      opt_arr
-    end
-  end
-
-  def user_options command_arr
-    command_arr.reduce Hash.new do |opt_hash, opt|
-      opt_hash[opt] = USER_OPTIONS[opt] if USER_OPTIONS.include? opt
-      opt_hash
-    end
-  end
-
 end
