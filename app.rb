@@ -1,5 +1,4 @@
 # Add load paths here:
-$LOAD_PATH.unshift('lib/loader')
 $LOAD_PATH.unshift('lib/module')
 $LOAD_PATH.unshift('lib/class')
 $LOAD_PATH.unshift('save')
@@ -8,4 +7,5 @@ $LOAD_PATH.unshift('save')
 require "loader"
 
 # launch application:
-TicTacToe.new
+loader = Loader.new
+game = loader.load_game "tic_tac_toe"
