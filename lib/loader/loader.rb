@@ -5,8 +5,13 @@ class Loader
     include Error
     include Variablize
 
+    attr_reader :load_script, :game_dir
+
+
     def get_loader game
         raise NotImplementedError, self.error "Script not found" unless require_relative game
+        @load_script = game
+        @game_dir = "lib/game/#{game}"
         cls_name = self.script_name, "Loader::"
         Object.const_get cls_name
     end
