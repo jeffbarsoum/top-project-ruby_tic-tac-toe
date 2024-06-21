@@ -1,4 +1,4 @@
-class Display::Curses
+class Display::TUI
   include Curses
 
   def initialize
