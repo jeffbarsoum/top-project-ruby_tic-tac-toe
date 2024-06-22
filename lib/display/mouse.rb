@@ -2,13 +2,14 @@ require "curses"
 
 class Display::TUI::Mouse
 
-  attr_reader :pos_hash
+  attr_reader :pos_hash, :curs_timeout
   include Curses
 
 
   @positions = []
 
   def initialize
+    @curs_timeout = 1
     # Switch on mouse continous position reporting
     print("\x1b[?1003h")
 
@@ -24,13 +25,22 @@ class Display::TUI::Mouse
       addch pos_old[:pixel]
     end
 
+    for i in 0..self.positions.length-1 do |pos|
+      break if pos[i][:timestamp] <= Time.now - self.timeout
+
+      pos_old = @positions.shift
+      setpos pos_old[:pos][:y], pos_old[:pos][:x]
+      addch pos_old[:pixel]
+    end
+
     setpos y, x
     pos_hash = {
       pos: {
         y: y,
         x: x
       },
-      pixel: inch
+      pixel: inch,
+      timestamp: Time.now
     }
     addstr "<"
     @positions << pos_hash
