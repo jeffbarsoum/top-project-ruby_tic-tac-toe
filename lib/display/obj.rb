@@ -1,6 +1,27 @@
 class Display::TUI::Obj
 
-  attr_reader :ch_array, :attr_array, :length, :width
+  attr_reader :ch_array, :opts
+
+  @opts = {
+    selectable?: nil,
+    is_selected?: nil,
+    length: nil,
+    width: nil,
+    cursor_pos: nil,
+    color: nil,
+    attr_array: nil
+  }
+
+  def opts=param, val
+    return false unless self.opts.key? param
+    @opts[param] = val
+  end
+
+  def opts param, val
+    return false unless self.opts.key? param
+    self.opts[param]
+  end
+
 
   def initialize ch_array, attr_array
     @ch_array = ch_array
