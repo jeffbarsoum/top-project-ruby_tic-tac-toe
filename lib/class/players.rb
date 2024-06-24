@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'player'
 
 class Players
@@ -28,8 +30,8 @@ class Players
     choose_player
   end
 
-  def player_join=(p)
-    @players.push p
+  def player_join=(player)
+    @players.push player
   end
 
   def get_players(index = nil)
@@ -38,11 +40,11 @@ class Players
     players
   end
 
-  def get_current_player
+  def current_player
     get_players 0
   end
 
-  def get_next_player
+  def next_player
     get_players 1
   end
 

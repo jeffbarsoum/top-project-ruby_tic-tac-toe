@@ -1,38 +1,24 @@
-require "lib/class/state"
+# frozen_string_literal: true
 
-class TicTacToe::State::Input < State
+require 'lib/class/state'
 
-  def opts param = nil
-    super param
-  end
+module TicTacToe
+  module State
+    class Input < State
+      def initialize message:, any_text:, cmds:, **opts
+        self.opts = :hash, self.cmds.cmd_hash(cmds) || %i[back quit]
+        self.opts = :cmds, self.cmds.user_input_arr(cmds) || %i[back quit]
 
-  def opts=param, value
-    super param, value
-  end
+        self.opts = :display, display(message)
+        self.opts = :vertical, false
+        self.opts = :input?, true
+        self.opts = :any_text?, any_text?
 
-  def get_next_state
-    super
-  end
+        super
+      end
 
-  def game_save
-    super
-  end
-
-
-  def initialize message:, any_text?:, cmds:, **opts
-    self.opts = :hash, self.cmds.cmd_hash cmds || [:back, :quit]
-    self.opts = :cmds, self.cmds.user_input_arr cmds || [:back, :quit]
-
-    self.opts = :display, self.display message
-    self.opts = :vertical, false
-    self.opts = :input?, true
-    self.opts = :any_text?, any_text?
-
-    super
-  end
-
-  def display message
-    msg_screen <<-STRING
+      def display(message)
+        msg_screen <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
     Yerrrrrrrr, question, famo...
     ------------------------------------------------------------------------------------
@@ -40,7 +26,8 @@ class TicTacToe::State::Input < State
     ------------------------------------------------------------------------------------
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
 
-    STRING
+        STRING
+      end
+    end
   end
-
 end

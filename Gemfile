@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 gem 'curses'
-gem 'rubocop'
+gem 'rubocop', require: false

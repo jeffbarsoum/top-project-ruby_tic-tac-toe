@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DataBoard
   def square_size
     [3, 5]

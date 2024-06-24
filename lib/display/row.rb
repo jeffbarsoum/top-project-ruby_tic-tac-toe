@@ -1,18 +1,25 @@
-class Display::TUI::Row
-  attr_reader :obj_array, :opts
+# frozen_string_literal: true
 
-  @opts = {
-    length: nil,
-    width: nil,
-    cursor_pos: nil
-  }
+module Display
+  module TUI
+    class Row
+      attr_reader :obj_array
 
-  def opts=param, val
-    return false unless self.opts.key? param
-    @opts[param] = val
+      @opts = {
+        length: nil,
+        width: nil,
+        cursor_pos: nil
+      }
+
+      def opts=(param, val)
+        @opts[param] = val unless opts.key? param
+      end
+
+      def opts(param, _val)
+        return false unless opts.key? param
+
+        opts[param]
+      end
+    end
   end
-
-  def opts param, val
-    return false unless self.opts.key? param
-    self.opts[param]
-  end
+end

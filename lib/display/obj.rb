@@ -1,40 +1,44 @@
-class Display::TUI::Obj
-  attr_reader :ch_array, :opts
+# frozen_string_literal: true
 
-  @opts = {
-    selectable?: nil,
-    is_selected?: nil,
-    length: nil,
-    width: nil,
-    cursor_pos: nil,
-    color: nil,
-    attr_array: nil
-  }
+module Display
+  module TUI
+    class Obj
+      attr_reader :ch_array
 
-  def opts=(param, val)
-    return false unless opts.key? param
+      @opts = {
+        selectable?: nil,
+        is_selected?: nil,
+        length: nil,
+        width: nil,
+        cursor_pos: nil,
+        color: nil,
+        attr_array: nil
+      }
 
-    @opts[param] = val
-  end
+      def opts=(param, val)
+        @opts[param] = val unless opts.key? param
+      end
 
-  def opts(param, _val)
-    return false unless opts.key? param
+      def opts(param, _val)
+        return false unless opts.key? param
 
-    opts[param]
-  end
+        opts[param]
+      end
 
-  def initialize(ch_array, attr_array)
-    @ch_array = ch_array
-    @attr_array = attr_array
-    get_dimensions
-  end
+      def initialize(ch_array, attr_array)
+        @ch_array = ch_array
+        @attr_array = attr_array
+        get_dimensions
+      end
 
-  def get_dimensions
-    @length = 0
-    @width = 0
-    ch_array.each do |row|
-      length += 1
-      width = [width, row.flatten.length || 0].max
+      def dimensions
+        @length = 0
+        @width = 0
+        ch_array.each do |row|
+          @length += 1
+          [width, row.flatten.length || 0].max
+        end
+      end
     end
   end
 end

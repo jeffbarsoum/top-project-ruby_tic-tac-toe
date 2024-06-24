@@ -1,45 +1,50 @@
-class Display::TUI:Matrix
-  attr_reader :array, :length, :width, :cursor_pos
-  include Curses::Key
+# frozen_string_literal: true
 
-  @opts = {
-    length: nil,
-    width: nil,
-    cursor_pos: nil,
-  }
+module Display
+  class TUI
+    attr_reader :array, :length, :width, :cursor_pos
 
-  def opts=param, val
-    return false unless self.opts.key? param
-    @opts[param] = val
-  end
+    include Curses::Key
 
-  def opts param, val
-    return false unless self.opts.key? param
-    self.opts[param]
-  end
-
-  def initialize
-    @cmds = {
-      up: UP,
-      down: DOWN,
-      left: LEFT,
-      right: RIGHT,
-      enter: ENTER
+    @opts = {
+      length: nil,
+      width: nil,
+      cursor_pos: nil
     }
 
-  def get_dimensions
-    array.each do |row|
-      row_width = 0
-      row.each do |obj|
-        @length = [self.length, obj.length].max
-        row_width += obj.width
+    def opts=(param, val)
+      @opts[param] = val unless opts.key? param
+    end
+
+    def opts(param, _val)
+      return false unless opts.key? param
+
+      opts[param]
+    end
+
+    def initialize
+      @cmds = {
+        up: UP,
+        down: DOWN,
+        left: LEFT,
+        right: RIGHT,
+        enter: ENTER
+      }
+    end
+
+    def dimensions
+      array.each do |row|
+        row_width = 0
+        row.each do |obj|
+          @length = [length, obj.length].max
+          row_width += obj.width
+        end
+        @width = [width, row_width].max
       end
-      @width = [self.width, row_width].max
+    end
+
+    def draw_border(margin: 1, padding: 1)
+      @array
     end
   end
-
-  def draw_border margin: 1, padding: 1
-    @array.each |
-
-
 end

@@ -1,18 +1,19 @@
-require_relative "board"
-require_relative "square"
+# frozen_string_literal: true
+
+require_relative 'board'
+require_relative 'square'
 
 class Matrix < Board
   include DataBoard
 
   attr_reader :board_size, :matrix, :coordinates
 
-
-  def initialize fsm
-    @board_size = self.load_board_size fsm
-    self.populate_matrix self.board_size
+  def initialize(fsm)
+    @board_size = load_board_size fsm
+    populate_matrix board_size
   end
 
-  def load_board_size fsm
+  def load_board_size(fsm)
     msg <<-STRING
     How big do you want the Tic Tac Toe Board to be?
 
@@ -25,8 +26,9 @@ class Matrix < Board
     input_state.user_input
   end
 
-  def populate_matrix board_size
-    return self.matrix unless self.matrix.empty?
+  def populate_matrix(board_size)
+    return matrix unless matrix.empty?
+
     board_size.times do |row|
       row_id = row + 1
       row_array = []
@@ -34,7 +36,7 @@ class Matrix < Board
         col_id = 'a'..'z'[col]
         coord = col_id + row_id.to_s
         @coordinates.push coord
-        new_square = Square.new self.parse_coordinates coord
+        new_square = Square.new parse_coordinates coord
         row_array.push new_square
       end
       @matrix.push row_array
@@ -45,7 +47,7 @@ class Matrix < Board
     @matrix = []
   end
 
-  def parse_coordinates coordinates
+  def parse_coordinates(coordinates)
     row_coord = coordinates[0]
     col_coord = coordinates[1]
     board_size = self.board_size
@@ -59,55 +61,58 @@ class Matrix < Board
     is_valid_row = (1..max_row).to_a.include? row_coord
 
     return { row: row, col: col, text: coordinates } if is_valid_col && is_valid_row
+
     false
   end
 
-  def get_piece coordinates
-    coord = self.parse_coordinates coordinates
-    self.matrix[coord[:row]][coord[:col]]
+  def get_piece(coordinates)
+    coord = parse_coordinates coordinates
+    matrix[coord[:row]][coord[:col]]
   end
 
-  def assign_piece player, coordinates
+  def assign_piece(player, coordinates)
     return false unless self.coordinates.include? coordinates
-    self.get_piece coordinates .assign_player player
+
+    get_piece coordinates.assign_player player
     @coordinates.delete coordinates
 
-    self.check_matrix player
+    check_matrix player
   end
 
-  def check_win piece_arr, player
-    check_arr = piece_arr.map { |piece| piece.player }
+  def check_win(piece_arr, player)
+    check_arr = piece_arr.map(&:player)
     assigned_arr = [check_arr - nil]
-    can_win? = assigned_arr.uniq.length == 1 && assigned_arr.first == player
-    is_win? = can_win? && check_arr == assigned_arr
-    return false unless can_win?
-    return true if is_win?
+    can_win = assigned_arr.uniq.length == 1 && assigned_arr.first == player
+    is_win = can_win && check_arr == assigned_arr
+    return false unless can_win
+    return true if is_win
+
     check_arr.length - assigned_arr.length
   end
 
-  def check_matrix player
+  def check_matrix(player)
     board_data = {}
-    for i in 0..self.board_size
+    for i in 0..board_size
       col_arr = []
       diag_left_arr = []
       diag_right_arr = []
-      for j in 0..self.board_size
-        col_arr.push self.matrix[j][i]
-        diag_left_arr.push self.matrix[j][j]
-        diag_right_arr.push self.matrix[j][self.board_size - 1 - j]
+      for j in 0..board_size
+        col_arr.push matrix[j][i]
+        diag_left_arr.push matrix[j][j]
+        diag_right_arr.push matrix[j][board_size - 1 - j]
       end
-      board_data[:row][i] = self.check_win self.matrix[i], player
-      board_data[:col][i] = self.check_win col_arr, player
-      board_data[:diagonal][:left] = self.check_win diag_left_arr, player
-      board_data[:diagonal][:right] = self.check_win diag_right_arr, player
+      board_data[:row][i] = check_win matrix[i], player
+      board_data[:col][i] = check_win col_arr, player
+      board_data[:diagonal][:left] = check_win diag_left_arr, player
+      board_data[:diagonal][:right] = check_win diag_right_arr, player
     end
     board_data.each do |type, hsh|
       hsh.each do |id, result|
         return { col_type: type, id: id } if result == true
+
         hsh[type].delete id if result == false
       end
     end
     board_data
   end
-
 end
