@@ -38,5 +38,8 @@ class Display::TUI:Matrix
     end
   end
 
+  def draw_border margin: 1, padding: 1
+    @array.each |
+
 
 end
