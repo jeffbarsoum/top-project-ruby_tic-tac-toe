@@ -80,9 +80,9 @@ class DisplayElements
     sq_pixels.times do |row|
       ch_array << []
       sq_pixels.times do |col|
-        is_center = row == col && row / (sq_pixels + 1) == 0.5
+        ch_array[row][col] = box(:cross_diagonal) if row == col && row / (sq_pixels + 1) == 0.5
         is_left_diag = row == col && !is_center
-        is_right_diag =
+        is_right_diag = row == sq_pixels - col && !is_center
           ch_array[row] << nil
       end
     end
