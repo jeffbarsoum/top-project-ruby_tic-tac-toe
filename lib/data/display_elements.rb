@@ -1,5 +1,4 @@
 class DisplayElements
-
   def borders
     {
       vertical: {
@@ -68,13 +67,14 @@ class DisplayElements
     }
   end
 
-  def box side, style = :light, element = nil
+  def box(side, style = :light, element = nil)
     return borders[side] unless borders[side].is_a? Hash
     return borders[side][style] unless element
-    return borders[side][:"#{style}_#{element}"]
+
+    borders[side][:"#{style}_#{element}"]
   end
 
-  def draw_x size = 2
+  def draw_x(size = 2)
     sq_pixels = (size - 1) * 2 + 1
     ch_array = []
     sq_pixels.times do |row|
@@ -82,18 +82,15 @@ class DisplayElements
       sq_pixels.times do |col|
         is_center = row == col && row / (sq_pixels + 1) == 0.5
         is_left_diag = row == col && !is_center
-        is_right_diag = 
-        ch_array[row] << nil
+        is_right_diag =
+          ch_array[row] << nil
       end
     end
 
-    return [
+    [
       []
     ]
   end
 
-  def draw_border array, style = :light, element = nil
-
-  end
-
+  def draw_border(array, style = :light, element = nil); end
 end

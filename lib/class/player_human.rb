@@ -1,12 +1,10 @@
 class Player
-
   attr_reader :name, :player, :score
 
-
-  def initialize name, player_id
-      @name = name
-      @player = player_id
-      @score = 0
+  def initialize(name, player_id)
+    @name = name
+    @player = player_id
+    @score = 0
   end
 
   def add_score
@@ -14,7 +12,6 @@ class Player
   end
 
   def to_s
-    puts self.player
+    puts player
   end
-
 end

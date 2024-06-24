@@ -1,13 +1,11 @@
-require "lib/class/player_human"
+require 'lib/class/player_human'
 class TicTacToe::PlayerHuman < PlayerHuman
-
   attr_reader :name, :player, :score
 
-
-  def initialize name, player_id
-      @name = name
-      @player = player_id
-      @score = 0
+  def initialize(name, player_id)
+    @name = name
+    @player = player_id
+    @score = 0
   end
 
   def add_score
@@ -15,7 +13,6 @@ class TicTacToe::PlayerHuman < PlayerHuman
   end
 
   def to_s
-    puts self.player
+    puts player
   end
-
 end

@@ -1,28 +1,25 @@
-require "lib/class/state"
+require 'lib/class/state'
 
 class TicTacToe::State::Title < State
-
   attr_reader :cmd
 
-
-  def opts param = nil
+  def opts(param = nil)
     super param
   end
 
-  def opts=param, value
+  def opts=(param, value)
     super param, value
   end
 
-  def run_cmd opts
+  def run_cmd(opts)
     super opts
   end
-
 
   def initialize **opts
     super opts
   end
 
-  def display _args = {}
+  def display(_args = {})
     msg_screen <<-STRING
     XXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOOXXXOOO
                                         Tic Tac Toe!
@@ -33,20 +30,11 @@ class TicTacToe::State::Title < State
     STRING
   end
 
-  def start
+  def start; end
 
-  end
+  def load; end
 
-  def load
+  def save; end
 
-  end
-
-  def save
-
-  end
-
-  def quit
-
-  end
-
+  def quit; end
 end

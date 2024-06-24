@@ -1,12 +1,10 @@
 class Stats
-
   attr_reader :stats
-
 
   def initialize
     @stats = {}
-    @stats[:score] = {x: 0, o: 0, draw: 0}
-    @stats[:turn] = {x: 0, o: 0}
+    @stats[:score] = { x: 0, o: 0, draw: 0 }
+    @stats[:turn] = { x: 0, o: 0 }
     @stats[:round] = 0
     @stats[:winner] = false
   end
@@ -27,11 +25,11 @@ class Stats
     @stats[:winner]
   end
 
-  def add_score player
+  def add_score(player)
     @stats[:score][player.to_sym] += 1
   end
 
-  def add_turn player
+  def add_turn(player)
     @stats[:turn][player.to_sym] += 1
   end
 
@@ -39,8 +37,9 @@ class Stats
     @stats[:round] += 1
   end
 
-  def add_winner data
-    return @stats[:winner] = data if data.is_a? "Hash"
+  def add_winner(data)
+    return @stats[:winner] = data if data.is_a? 'Hash'
+
     false
   end
 end

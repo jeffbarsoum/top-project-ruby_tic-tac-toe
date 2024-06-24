@@ -1,5 +1,4 @@
 module DataBoard
-
   def square_size
     [3, 5]
   end
@@ -14,13 +13,12 @@ module DataBoard
 
   def border
     {
-      top: "_",
-      side: "|"
+      top: '_',
+      side: '|'
     }
   end
 
   def square_choices
-    [:x, :o, :nil]
+    %i[x o nil]
   end
-
 end

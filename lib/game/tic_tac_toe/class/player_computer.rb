@@ -1,14 +1,12 @@
 require 'lib/class/player_computer'
 
 class TicTacToe::PlayerComputer < PlayerComputer
-
   attr_reader :name, :player, :score
 
-
-  def initialize name, player_id
-      @name = name
-      @player = player_id
-      @score = 0
+  def initialize(name, player_id)
+    @name = name
+    @player = player_id
+    @score = 0
   end
 
   def add_score
@@ -16,10 +14,8 @@ class TicTacToe::PlayerComputer < PlayerComputer
   end
 
   def to_s
-    puts self.player
+    puts player
   end
 
-  def get_closest_win player, matrix
-  end
-
+  def get_closest_win(player, matrix); end
 end

@@ -1,31 +1,28 @@
-require "lib/class/state"
+require 'lib/class/state'
 
 class TicTacToe::State::Load < State
-
   attr_reader :cmd
 
-
-  def opts param = nil
+  def opts(param = nil)
     super param
   end
 
-  def opts=param, value
+  def opts=(param, value)
     super param, value
   end
 
-  def run_cmd opts
+  def run_cmd(opts)
     super opts
   end
-
 
   def initialize **opts
     super opts
   end
 
-  def display data:, **args
-    print_save_list = ""
-    data.each_with_index do |save, i|
-      str_time = save.timestamp.strftime("%d/%m/%Y, %I:%M %p")
+  def display data:, **_args
+    print_save_list = ''
+    data.each_with_index do |save, _i|
+      str_time = save.timestamp.strftime('%d/%m/%Y, %I:%M %p')
       str_name = save.name
       p1_score = "#{save.players[0].name}: #{save.players[0].score}"
       p2_score = "#{save.players[1].name}: #{save.players[1].score}"
@@ -44,16 +41,11 @@ class TicTacToe::State::Load < State
 
     STRING
 
-    self.title
+    title
     msg_hud
   end
 
-  def back
+  def back; end
 
-  end
-
-  def quit
-
-  end
-
+  def quit; end
 end
