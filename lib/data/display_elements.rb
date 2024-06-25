@@ -63,7 +63,7 @@ class DisplayElements
       },
       right_diagonal: "\u2571",
       left_diagonal: "\u2572",
-      cross_diagonal: "\u2572"
+      cross_diagonal: "\u2573"
     }
   end
 
