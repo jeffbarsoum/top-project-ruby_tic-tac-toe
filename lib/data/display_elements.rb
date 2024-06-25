@@ -80,16 +80,16 @@ class DisplayElements
     sq_pixels.times do |row|
       ch_array << []
       sq_pixels.times do |col|
-        ch_array[row][col] = box(:cross_diagonal) if row == col && row / (sq_pixels + 1) == 0.5
+        is_center = row == col && row == sq_pixels / 2
         is_left_diag = row == col && !is_center
         is_right_diag = row == sq_pixels - col && !is_center
-          ch_array[row] << nil
+        ch_array[row][col] = box(:cross_diagonal) if is_center
+        ch_array[row][col] = box(:left_diagonal) if is_left_diag
+        ch_array[row][col] = box(:right_diagonal) if is_right_diag
+        ch_array[row][col] = nil unless is_center || is_left_diag || is_right_diag
       end
     end
-
-    [
-      []
-    ]
+    ch_array
   end
 
   def draw_border(array, style = :light, element = nil); end
