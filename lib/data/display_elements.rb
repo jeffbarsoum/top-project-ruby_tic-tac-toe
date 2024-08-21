@@ -83,14 +83,28 @@ class DisplayElements
         is_center = row == col && row == (sq_pixels - 1) / 2
         is_left_diag = row == col && !is_center
         is_right_diag = row == sq_pixels - 1 - col && !is_center
+        ch_array[row][col] = nil
         ch_array[row][col] = box(:cross_diagonal) if is_center
         ch_array[row][col] = box(:left_diagonal) if is_left_diag
         ch_array[row][col] = box(:right_diagonal) if is_right_diag
-        ch_array[row][col] = nil unless is_center || is_left_diag || is_right_diag
       end
     end
     ch_array
   end
 
   def draw_border(array, style = :light, element = nil); end
+
+  def draw_side(side, side_arr, style = :light, element = nil)
+    border_arr = []
+    border_length = side_arr.length
+    is_top_bottom = %i[top bottom].include?(side)
+    default_pixel = %i[left right].include? side ? :vertical : :horizontal
+    border_arr = Array.new(border_length, box(default_pixel, style, element))
+    p border_arr
+    border_length.times do |pixel|
+      border_arr[pixel] = box(:"#{side}_left_corner", style, element) if is_top_bottom && pixel.zero?
+      border_arr[pixel] = box(:"#{side}_right_corner", style, element) if is_top_bottom && pixel == border_length - 1
+    end
+    border_arr
+  end
 end
